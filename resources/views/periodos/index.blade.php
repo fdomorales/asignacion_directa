@@ -59,7 +59,7 @@
                                     <span class="text-black">{{$periodo->region}}</span>
                                 </td>
                                 @switch($periodo->estado)
-                                    @case('Activo')
+                                    @case('Habilitado')
                                     <td class="text-right">
                                         <span class="badge badge-success">{{$periodo->estado}}</span>
                                     </td>

@@ -54,7 +54,12 @@
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Estado</label>
-                            <input type="text" name="estado" class="form-control bg-white " >
+                            <select class="form-select" name="estado_nombre" >
+                                <option value="" selected disabled hidden></option>
+                                    @foreach ($estado_periodo as $estado)
+                                        <option value="{{$estado->nombre_estado}}">{{$estado->nombre_estado}}</option>
+                                    @endforeach
+                            </select>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar</button>
