@@ -17,11 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('descripcion');
             $table->string('region');
-            $table->string('estado');
-            $table->date('fehca_inicio');
+            $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->timestamps();
+
+
         });
+
     }
 
     /**
