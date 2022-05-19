@@ -58,15 +58,15 @@
                                 <td>
                                     <span class="text-black">{{$periodo->region}}</span>
                                 </td>
-                                @switch($periodo->estado)
-                                    @case('Habilitado')
+                                @switch($periodo->estado_periodos_id)
+                                    @case("1")
                                     <td class="text-right">
-                                        <span class="badge badge-success">{{$periodo->estado}}</span>
+                                        <span class="badge badge-success">{{$periodo->nombre_estado}}</span>
                                     </td>
                                         @break
                                     @default
                                     <td class="text-right">
-                                        <span class="badge badge-danger">{{$periodo->estado}}</span>
+                                        <span class="badge badge-danger">{{$periodo->nombre_estado}}</span>
                                     </td>
                                 @endswitch
                                 <td class="text-right">

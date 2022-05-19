@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Periodo;
 use App\Models\EstadoPeriodo;
+use Illuminate\Support\Facades\DB;
 
 class PeriodosController extends Controller
 {
@@ -15,7 +16,12 @@ class PeriodosController extends Controller
      */
     public function index()
     {
-        $periodos = Periodo::all();
+        //$periodos = Periodo::all();
+        $periodos = DB::table('periodos')
+        ->join('estado_periodos','periodos.estado_periodos_id','=', 'estado_periodos.id')
+        ->select('periodos.*','nombre_estado')
+        ->get();
+        //return ($periodos);
         return view('periodos.index', ['periodos' => $periodos]);
     }
 
@@ -45,7 +51,7 @@ class PeriodosController extends Controller
         $nuevo_periodo = new Periodo;
         $nuevo_periodo->descripcion = $request->descripcion;
         $nuevo_periodo->region = $request->region;
-        $nuevo_periodo->estado = $request->estado_nombre;
+        $nuevo_periodo->estado_periodos_id = $request->estado_nombre;
         $nuevo_periodo->fecha_inicio = $request->fecha_inicio;
         $nuevo_periodo->fecha_fin = $request->fecha_fin;
         $nuevo_periodo->save();
@@ -62,11 +68,24 @@ class PeriodosController extends Controller
      */
     public function show($id)
     {
+        //$periodo_seleccionado = Periodo::find($id);
+        $periodo_seleccionado = DB::table('periodos')
+        ->join('estado_periodos','periodos.estado_periodos_id','=', 'estado_periodos.id')
+        ->select('periodos.*','nombre_estado')
+        ->first();
+        $estado_periodo = EstadoPeriodo::all();
+        //return $periodo_seleccionado;
+        return view('periodos.editar_formulario', ['periodo'=> $periodo_seleccionado, 'estado_periodo'=>$estado_periodo]);
+    }
+
+   /*  {
         $periodo_seleccionado = Periodo::find($id);
         $estado_periodo = EstadoPeriodo::all();
+        return $periodo_seleccionado;
+        //return view('periodos.editar_formulario', ['periodo'=> $periodo_seleccionado, 'estado_periodo'=> $estado_periodo]);
+    } */
 
-        return view('periodos.editar_formulario', ['periodo'=> $periodo_seleccionado, 'estado_periodo'=> $estado_periodo]);
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -91,7 +110,7 @@ class PeriodosController extends Controller
         $periodo_a_editar = Periodo::find($id);
         $periodo_a_editar->descripcion = $request->descripcion;
         $periodo_a_editar->region = $request->region;
-        $periodo_a_editar->estado = $request->estado_nombre;
+        $periodo_a_editar->estado_periodos_id = $request->estado_nombre;
         $periodo_a_editar->fecha_inicio = $request->fecha_inicio;
         $periodo_a_editar->fecha_fin = $request->fecha_fin;
         $periodo_a_editar->save();

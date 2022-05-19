@@ -57,7 +57,7 @@
                             <select class="form-select" name="estado_nombre" >
                                 <option value="" selected disabled hidden></option>
                                     @foreach ($estado_periodo as $estado)
-                                        <option value="{{$estado->nombre_estado}}">{{$estado->nombre_estado}}</option>
+                                        <option value="{{$estado->id}}">{{$estado->nombre_estado}}</option>
                                     @endforeach
                             </select>
                         </div>

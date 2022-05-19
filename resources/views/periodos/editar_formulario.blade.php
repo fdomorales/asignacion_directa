@@ -58,9 +58,9 @@
                         <div class="form-group col-sm-6">
                             <label>Estado</label>
                             <select class="form-select" name="estado_nombre" >
-                                <option value="{{$periodo->estado}}" selected disabled hidden>{{$periodo->estado}}</option>
+                                <option value="{{$periodo->nombre_estado}}" selected disabled hidden>{{$periodo->nombre_estado}}</option>
                                     @foreach ($estado_periodo as $estado)
-                                        <option value="{{$estado->nombre_estado}}">{{$estado->nombre_estado}}</option>
+                                        <option value="{{$estado->id}}">{{$estado->nombre_estado}}</option>
                                     @endforeach
                             </select>
                         </div>
