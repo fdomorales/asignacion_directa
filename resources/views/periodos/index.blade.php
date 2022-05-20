@@ -56,7 +56,7 @@
                                     <span >{{$periodo->fecha_fin}}</span>
                                 </td>
                                 <td>
-                                    <span class="text-black">{{$periodo->region}}</span>
+                                    <span class="text-black">{{$periodo->region_id}}</span>
                                 </td>
                                 @switch($periodo->estado_periodos_id)
                                     @case("1")

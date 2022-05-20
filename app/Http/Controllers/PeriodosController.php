@@ -50,11 +50,13 @@ class PeriodosController extends Controller
         ]);
         $nuevo_periodo = new Periodo;
         $nuevo_periodo->descripcion = $request->descripcion;
-        $nuevo_periodo->region = $request->region;
+        $nuevo_periodo->region_id = $request->region;
+        $nuevo_periodo->tipo_periodos_id = $request->tipo_periodos;
         $nuevo_periodo->estado_periodos_id = $request->estado_nombre;
         $nuevo_periodo->fecha_inicio = $request->fecha_inicio;
         $nuevo_periodo->fecha_fin = $request->fecha_fin;
         $nuevo_periodo->save();
+        //return $nuevo_periodo;
 
         return redirect()->route('periodos')->with('success', 'Periodo creado');
 
@@ -109,7 +111,7 @@ class PeriodosController extends Controller
     {
         $periodo_a_editar = Periodo::find($id);
         $periodo_a_editar->descripcion = $request->descripcion;
-        $periodo_a_editar->region = $request->region;
+        $periodo_a_editar->region_id = $request->region;
         $periodo_a_editar->estado_periodos_id = $request->estado_nombre;
         $periodo_a_editar->fecha_inicio = $request->fecha_inicio;
         $periodo_a_editar->fecha_fin = $request->fecha_fin;

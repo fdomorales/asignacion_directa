@@ -50,7 +50,12 @@
                     <div class="row">
                         <div class="form-group col-sm-6">
                             <label>Región</label>
-                            <input type="text" name="region" class="form-control bg-white "  >
+                            <select class="form-select" name="region" >
+                                <option value="" selected disabled hidden></option>
+                                <option value="1">Arica</option>
+                                <option value="2">Met</option>
+                                    
+                            </select>
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Estado</label>
@@ -59,6 +64,17 @@
                                     @foreach ($estado_periodo as $estado)
                                         <option value="{{$estado->id}}">{{$estado->nombre_estado}}</option>
                                     @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Tipo de periodo</label>
+                            <select class="form-select" name="tipo_periodos" >
+                                <option value="" selected disabled hidden></option>
+                                <option value="1">Regional</option>
+                                <option value="2">Nacional</option>
+                                    
                             </select>
                         </div>
                     </div>
