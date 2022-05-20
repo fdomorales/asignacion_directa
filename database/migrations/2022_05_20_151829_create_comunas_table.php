@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('comunas', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre_comuna');
+            $table->string('codigo_comuna');
             $table->timestamps();
         });
     }

@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('tipo_periodos', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre_tipo_periodo');
+            $table->string('descripcion_tipo_periodo');
             $table->timestamps();
         });
     }

@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('representantes', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre_representante');
+            $table->string('telefono_representante');
+            $table->bigInteger('organizacion_id')->unsigned();
             $table->timestamps();
         });
     }

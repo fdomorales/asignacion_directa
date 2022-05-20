@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('organizacions', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre_organizacion');
+            $table->string('correo_organizacion');
+            $table->bigInteger('comuna_id')->unsigned();
             $table->timestamps();
         });
     }

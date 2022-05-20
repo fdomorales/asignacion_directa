@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('regiones', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre_region');
+            $table->string('codigo_region');
             $table->timestamps();
         });
     }
