@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_comuna');
             $table->string('codigo_comuna');
+            $table->string('estado_comuna');
             $table->timestamps();
         });
     }

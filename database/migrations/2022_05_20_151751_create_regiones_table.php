@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_region');
             $table->string('codigo_region');
+            $table->string('estado_region');
             $table->timestamps();
         });
     }
