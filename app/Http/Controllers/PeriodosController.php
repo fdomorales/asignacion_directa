@@ -88,6 +88,7 @@ class PeriodosController extends Controller
         ->join('regiones','periodos.region_id','=', 'regiones.id')
         ->join('tipo_periodos', 'periodos.tipo_periodos_id', '=', 'tipo_periodos.id')
         ->select('periodos.*','nombre_estado', 'nombre_region', 'nombre_tipo_periodo')
+        ->where('periodos.id','=', $id)
         ->first();
         $estado_periodo = EstadoPeriodo::all();
         $regiones =DB::table('regiones')->select('*')->get();
