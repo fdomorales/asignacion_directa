@@ -55,9 +55,9 @@ class PeriodosController extends Controller
         $request -> validate([
             'descripcion'=>'required|min:3',
             'region'=>'required',
-            'tipo_periodos'=>'required',
-            'fecha_inicio'=>'required',
-            'fecha_fin'=>'required'
+            'fecha_inicio'=>'required|date',
+            'fecha_fin'=>'required|date|after:fecha_inicio',
+            'tipo_periodos'=>'required'
         ]);
         $nuevo_periodo = new Periodo;
         $nuevo_periodo->descripcion = $request->descripcion;
@@ -125,6 +125,13 @@ class PeriodosController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request -> validate([
+            'descripcion'=>'required|min:3',
+            'region'=>'required',
+            'fecha_inicio'=>'required|date',
+            'fecha_fin'=>'required|date|after:fecha_inicio',
+            'tipo_periodos'=>'required'
+        ]);
         $periodo_a_editar = Periodo::find($id);
         $periodo_a_editar->descripcion = $request->descripcion;
         $periodo_a_editar->region_id = $request->region;
