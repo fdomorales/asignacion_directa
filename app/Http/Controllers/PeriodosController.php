@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Periodo;
+use App\Models\Region;
+use App\Models\TipoPeriodo;
 use App\Models\EstadoPeriodo;
 use Illuminate\Support\Facades\DB;
 
@@ -19,8 +21,10 @@ class PeriodosController extends Controller
         //$periodos = Periodo::all();
         $periodos = DB::table('periodos')
         ->join('estado_periodos','periodos.estado_periodos_id','=', 'estado_periodos.id')
-        ->select('periodos.*','nombre_estado')
+        ->join('regiones', 'periodos.region_id', '=', 'regiones.id')
+        ->select('periodos.*','nombre_estado', 'nombre_region')
         ->get();
+        
         //return ($periodos);
         return view('periodos.index', ['periodos' => $periodos]);
     }
@@ -33,8 +37,11 @@ class PeriodosController extends Controller
     public function create()
     {
         $estado_periodo = EstadoPeriodo::all();
+        
+        $regiones = DB::table('regiones')->select('*')->get();
+        $tipo_periodo = TipoPeriodo::all();
 
-        return view('periodos.formulario', ['estado_periodo'=> $estado_periodo]);
+        return view('periodos.formulario', ['estado_periodo'=> $estado_periodo, 'regiones'=>$regiones, 'tipo_periodo'=> $tipo_periodo]);
     }
 
     /**
@@ -46,7 +53,11 @@ class PeriodosController extends Controller
     public function store(Request $request)
     {
         $request -> validate([
-            'descripcion'=>'required|min:3'
+            'descripcion'=>'required|min:3',
+            'region'=>'required',
+            'tipo_periodos'=>'required',
+            'fecha_inicio'=>'required',
+            'fecha_fin'=>'required'
         ]);
         $nuevo_periodo = new Periodo;
         $nuevo_periodo->descripcion = $request->descripcion;
@@ -55,6 +66,7 @@ class PeriodosController extends Controller
         $nuevo_periodo->estado_periodos_id = $request->estado_nombre;
         $nuevo_periodo->fecha_inicio = $request->fecha_inicio;
         $nuevo_periodo->fecha_fin = $request->fecha_fin;
+        $nuevo_periodo->tipo_periodos_id = $request->tipo_periodos;
         $nuevo_periodo->save();
         //return $nuevo_periodo;
 
@@ -73,11 +85,15 @@ class PeriodosController extends Controller
         //$periodo_seleccionado = Periodo::find($id);
         $periodo_seleccionado = DB::table('periodos')
         ->join('estado_periodos','periodos.estado_periodos_id','=', 'estado_periodos.id')
-        ->select('periodos.*','nombre_estado')
+        ->join('regiones','periodos.region_id','=', 'regiones.id')
+        ->join('tipo_periodos', 'periodos.tipo_periodos_id', '=', 'tipo_periodos.id')
+        ->select('periodos.*','nombre_estado', 'nombre_region', 'nombre_tipo_periodo')
         ->first();
         $estado_periodo = EstadoPeriodo::all();
+        $regiones =DB::table('regiones')->select('*')->get();
+        $tipo_periodo = TipoPeriodo::all();
         //return $periodo_seleccionado;
-        return view('periodos.editar_formulario', ['periodo'=> $periodo_seleccionado, 'estado_periodo'=>$estado_periodo]);
+        return view('periodos.editar_formulario',['periodo'=> $periodo_seleccionado, 'estado_periodo'=>$estado_periodo, 'regiones'=>$regiones, 'tipo_periodo'=> $tipo_periodo]);
     }
 
    /*  {
@@ -116,7 +132,6 @@ class PeriodosController extends Controller
         $periodo_a_editar->fecha_inicio = $request->fecha_inicio;
         $periodo_a_editar->fecha_fin = $request->fecha_fin;
         $periodo_a_editar->save();
-
         return redirect()->route('periodos')->with('success', 'Periodo actualizado');
     }
 

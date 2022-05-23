@@ -30,7 +30,12 @@
                 </div>
                 <div class="block-content p-5">
                     @if (session('success'))
-                        <h6 class="alert alert-success">{{session('success')}}</h6>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{session('success')}}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     @endif
                     <table class="table table-borderless table-hover table-striped mb-0">
                         <thead>
@@ -56,7 +61,7 @@
                                     <span >{{$periodo->fecha_fin}}</span>
                                 </td>
                                 <td>
-                                    <span class="text-black">{{$periodo->region_id}}</span>
+                                    <span class="text-black">{{$periodo->nombre_region}}</span>
                                 </td>
                                 @switch($periodo->estado_periodos_id)
                                     @case("1")

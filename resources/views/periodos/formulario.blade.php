@@ -35,7 +35,7 @@
                     @enderror
                     <div class="form-group">
                         <label >Descripción</label>
-                        <input type="text" name="descripcion" class="form-control" >
+                        <input type="text" name="descripcion"  class="form-control" >
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-6">
@@ -52,9 +52,9 @@
                             <label>Región</label>
                             <select class="form-select" name="region" >
                                 <option value="" selected disabled hidden></option>
-                                <option value="1">Arica</option>
-                                <option value="2">Met</option>
-                                    
+                                    @foreach ($regiones as $region)
+                                        <option value="{{$region->id}}">{{$region->nombre_region}}</option>
+                                    @endforeach
                             </select>
                         </div>
                         <div class="form-group col-sm-6">
@@ -72,8 +72,9 @@
                             <label>Tipo de periodo</label>
                             <select class="form-select" name="tipo_periodos" >
                                 <option value="" selected disabled hidden></option>
-                                <option value="1">Regional</option>
-                                <option value="2">Nacional</option>
+                                    @foreach ($tipo_periodo as $tipo)
+                                        <option value="{{$tipo->id}}">{{$tipo->nombre_tipo_periodo}}</option>
+                                    @endforeach
                                     
                             </select>
                         </div>
