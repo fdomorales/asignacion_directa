@@ -140,6 +140,7 @@ class PeriodosController extends Controller
         $periodo_a_editar->estado_periodos_id = $request->estado_nombre;
         $periodo_a_editar->fecha_inicio = $request->fecha_inicio;
         $periodo_a_editar->fecha_fin = $request->fecha_fin;
+        $periodo_a_editar->tipo_periodos_id = $request->tipo_periodos;
         $periodo_a_editar->save();
         return redirect()->route('periodos')->with('success', 'Periodo actualizado');
     }
