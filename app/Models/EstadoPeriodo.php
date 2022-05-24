@@ -12,6 +12,6 @@ class EstadoPeriodo extends Model
 
 
     public function periodo(){
-        return $this->hasMany(Periodo::class, 'id', 'estado_periodos_id');
+        return $this->hasMany(Periodo::class, 'estado_periodos_id', 'id');
     }
 }

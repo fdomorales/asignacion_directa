@@ -18,7 +18,7 @@ class PeriodosController extends Controller
      */
     public function index()
     {
-        //$periodos = Periodo::all();
+        //$periodos = Periodo::with(['regiones'])->get();
         $periodos = DB::table('periodos')
         ->join('estado_periodos','periodos.estado_periodos_id','=', 'estado_periodos.id')
         ->join('regiones', 'periodos.region_id', '=', 'regiones.id')
@@ -37,8 +37,8 @@ class PeriodosController extends Controller
     public function create()
     {
         $estado_periodo = EstadoPeriodo::all();
-        
-        $regiones = DB::table('regiones')->select('*')->get();
+        //$regiones = DB::table('regiones')->select('*')->get();
+        $regiones = Region::all();
         $tipo_periodo = TipoPeriodo::all();
 
         return view('periodos.formulario', ['estado_periodo'=> $estado_periodo, 'regiones'=>$regiones, 'tipo_periodo'=> $tipo_periodo]);
@@ -91,9 +91,10 @@ class PeriodosController extends Controller
         ->where('periodos.id','=', $id)
         ->first();
         $estado_periodo = EstadoPeriodo::all();
-        $regiones =DB::table('regiones')->select('*')->get();
+        $regiones = Region::all(); 
         $tipo_periodo = TipoPeriodo::all();
-        //return $periodo_seleccionado;
+
+        //return $estado_periodo->periodo;
         return view('periodos.editar_formulario',['periodo'=> $periodo_seleccionado, 'estado_periodo'=>$estado_periodo, 'regiones'=>$regiones, 'tipo_periodo'=> $tipo_periodo]);
     }
 

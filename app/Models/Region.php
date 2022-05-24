@@ -10,7 +10,7 @@ use App\Models\Periodo;
 class Region extends Model
 {
     use HasFactory;
-
+    protected $table = 'regiones';
     
     public function provincia(){
         return $this->hasMany(Provincia::class);
