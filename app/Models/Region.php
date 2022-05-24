@@ -16,6 +16,6 @@ class Region extends Model
         return $this->hasMany(Provincia::class);
     }
     public function periodo(){
-        return $this->hasMany(Periodo::class);
+        return $this->hasMany(Periodo::class, 'region_id');
     }
 }

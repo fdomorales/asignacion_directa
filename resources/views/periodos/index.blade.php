@@ -61,17 +61,17 @@
                                     <span >{{$periodo->fecha_fin}}</span>
                                 </td>
                                 <td>
-                                    <span class="text-black">{{$periodo->nombre_region}}</span>
+                                    <span class="text-black">{{$periodo->region->nombre_region}}</span>
                                 </td>
-                                @switch($periodo->estado_periodos_id)
+                                @switch($periodo->estado_periodos->id)
                                     @case("1")
                                     <td class="text-right">
-                                        <span class="badge badge-success">{{$periodo->nombre_estado}}</span>
+                                        <span class="badge badge-success">{{$periodo->estado_periodos->nombre_estado}}</span>
                                     </td>
                                         @break
                                     @default
                                     <td class="text-right">
-                                        <span class="badge badge-danger">{{$periodo->nombre_estado}}</span>
+                                        <span class="badge badge-danger">{{$periodo->estado_periodos->nombre_estado}}</span>
                                     </td>
                                 @endswitch
                                 <td class="text-right">

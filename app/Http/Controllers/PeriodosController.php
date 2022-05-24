@@ -18,12 +18,12 @@ class PeriodosController extends Controller
      */
     public function index()
     {
-        //$periodos = Periodo::with(['regiones'])->get();
-        $periodos = DB::table('periodos')
+        $periodos = Periodo::with([ 'estado_periodos','region'])->get();
+        /* $periodos = DB::table('periodos')
         ->join('estado_periodos','periodos.estado_periodos_id','=', 'estado_periodos.id')
         ->join('regiones', 'periodos.region_id', '=', 'regiones.id')
         ->select('periodos.*','nombre_estado', 'nombre_region')
-        ->get();
+        ->get(); */
         
         //return ($periodos);
         return view('periodos.index', ['periodos' => $periodos]);
