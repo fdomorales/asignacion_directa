@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PeriodosController;
+use App\Http\Controllers\PostulacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,6 @@ Route::get('/periodos/{id}', [PeriodosController::class, 'show'])->name('ver_per
 Route::patch('/periodos/{id}', [PeriodosController::class, 'update'])->name('actualizar_periodo');
 Route::delete('/periodos/{id}', [PeriodosController::class, 'destroy'])->name('borrar_periodo');
 
+Route::get('/postulacion', [PostulacionController::class, 'index']);
+Route::get('/postulacion/crear', [PostulacionController::class, 'create']);
 
