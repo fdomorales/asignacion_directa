@@ -13,13 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('organizacions', function (Blueprint $table) {
+        Schema::create('organizaciones', function (Blueprint $table) {
             $table->id();
             $table->string('nombre_organizacion');
             $table->string('correo_organizacion');
             $table->bigInteger('comuna_id')->unsigned();
             $table->timestamps();
         });
+        //datos de prueba
+        /* $data = [
+            ['nombre_organizacion'=>'Organización de prueba', 'correo_organizacion'=> 'prueba@prueba.cl', 'comuna_id'=>1]
+        ];
+        DB::table("organizaciones")->insert($data); */
+        //fin datos prueba
     }
 
     /**

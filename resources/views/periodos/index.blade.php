@@ -43,7 +43,7 @@
                                 <th >Descripción</th>
                                 <th>Fecha Inicio</th>
                                 <th class="d-none d-sm-table-cell">Fecha Fin</th>
-                                <th class="d-none d-sm-table-cell">Región</th>
+                                <th class="d-none d-sm-table-cell">Tipo Periodo</th>
                                 <th class="text-right">Estado</th>
                             </tr>
                         </thead>
@@ -61,7 +61,7 @@
                                     <span >{{$periodo->fecha_fin}}</span>
                                 </td>
                                 <td>
-                                    <span class="text-black">{{$periodo->region->nombre_region}}</span>
+                                    <span class="text-black">{{$periodo->tipo_periodos->nombre_tipo_periodo}}</span>
                                 </td>
                                 @switch($periodo->estado_periodos->id)
                                     @case("1")
@@ -120,6 +120,7 @@
                     </table>
                 </div>
             </div>
+            {{$periodos->links('pagination::bootstrap-5')}}
         </div>
         <!-- END Latest Orders -->
     </div>

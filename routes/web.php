@@ -26,6 +26,9 @@ Route::get('/periodos/{id}', [PeriodosController::class, 'show'])->name('ver_per
 Route::patch('/periodos/{id}', [PeriodosController::class, 'update'])->name('actualizar_periodo');
 Route::delete('/periodos/{id}', [PeriodosController::class, 'destroy'])->name('borrar_periodo');
 
-Route::get('/postulacion', [PostulacionController::class, 'index']);
-Route::get('/postulacion/crear', [PostulacionController::class, 'create']);
+//Route::get('/postulacion', [PostulacionController::class, 'index']);
+//Route::get('/postulacion/crear', [PostulacionController::class, 'create']);
+Route::resources(['postulacion'=> PostulacionController::class]);
 
+Route::get('postulacion/documento/{token}', [PostulacionController::class, 'getDocument'])->name('postulacion_documento');
+//Route::get('/postulacion/documento/{token}', 'PostulacionController@getDocument')->name('postulacion_documento');

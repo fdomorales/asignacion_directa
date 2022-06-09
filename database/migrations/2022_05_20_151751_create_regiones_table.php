@@ -20,6 +20,16 @@ return new class extends Migration
             $table->string('estado_region');
             $table->timestamps();
         });
+        
+        //datos de prueba
+        $data = [
+            ['nombre_region'=>'Metropolitana', 'codigo_region'=>'', 'estado_region'=>''],
+            ['nombre_region'=>'Arica', 'codigo_region'=>'', 'estado_region'=>''],
+            ['nombre_region'=>'Atacama', 'codigo_region'=>'', 'estado_region'=>''],
+            ['nombre_region'=>'Coquimbo', 'codigo_region'=>'', 'estado_region'=>'']
+        ];
+        DB::table("regiones")->insert($data);
+        //fin datos prueba
     }
 
     /**

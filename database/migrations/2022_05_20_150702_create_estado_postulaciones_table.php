@@ -19,7 +19,17 @@ return new class extends Migration
             $table->string('descripcion_estado_postulacion');
             $table->timestamps();
         });
+        //datos de prueba
+        $data = [
+            ['nombre_estado_postulacion'=>'Aprobado', 'descripcion_estado_postulacion' => ''],
+            ['nombre_estado_postulacion'=>'Pendiente', 'descripcion_estado_postulacion' => ''],
+            ['nombre_estado_postulacion'=>'Rechazado', 'descripcion_estado_postulacion' => '']
+        ];
+        DB::table("estado_postulaciones")->insert($data);
+        //fin datos prueba
     }
+    
+
 
     /**
      * Reverse the migrations.

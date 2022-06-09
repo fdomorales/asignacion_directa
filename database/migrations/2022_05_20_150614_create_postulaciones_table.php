@@ -15,9 +15,14 @@ return new class extends Migration
     {
         Schema::create('postulaciones', function (Blueprint $table) {
             $table->id();
-            $table->string('numero_postulantes');
+            $table->string('cupos');
+            $table->boolean('recibe_info');
+            $table->string('nombre_documento');
+            $table->string('ruta_documento');
+            $table->string('token_documento');
+            $table->string('hash_documento');
             $table->bigInteger('estado_postulacion_id')->unsigned();
-            $table->bigInteger('region_id')->unsigned();
+            $table->bigInteger('comuna_id')->unsigned();
             $table->bigInteger('periodo_id')->unsigned();
             $table->bigInteger('organizacion_id')->unsigned();
             $table->timestamps();

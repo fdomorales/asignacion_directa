@@ -20,6 +20,13 @@ return new class extends Migration
             $table->string('estado_provincia');
             $table->timestamps();
         });
+        //datos de prueba
+        /* $data = [
+            ['nombre_provincia'=>'Provincia de prueba', 'codigo_provincia'=>' ', 'estado_provincia'=>' ']
+        ];
+        DB::table("provincias")->insert($data); */
+        //fin datos prueba
+        
     }
 
     /**

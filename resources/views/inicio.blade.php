@@ -11,12 +11,6 @@
     <meta name="robots" content="noindex, nofollow">
 
     <!-- Open Graph Meta -->
-    <meta property="og:title" content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework">
-    <meta property="og:site_name" content="Codebase">
-    <meta property="og:description" content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
 
     <!-- Icons -->
     <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
@@ -34,10 +28,15 @@
 
     <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
     <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
+    
+    
     <link rel="stylesheet" id="css-theme" href="{{ asset('assets/css/themes/corporate.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>{{-- cambiar CDN --}}
+    <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <!-- END Stylesheets -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+{{--     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script> --}}
 </head>
 <body>
 
@@ -105,7 +104,7 @@
                             <div class="content-header-item">
                                 <a class="link-effect font-w700" href="index.html">
                                     <i class="fa fa-building-o text-primary"></i>
-                                    <span class="font-size-xl text-dual-primary-dark">SERNATUR</span><span class="font-size-xl text-primary"> VTE</span>
+                                    <span class="font-size-xl text-dual-primary-dark">SERNATUR</span>
                                 </a>
                             </div>
                             <!-- END Logo -->
@@ -128,10 +127,7 @@
                             <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-layers"></i>Postulaciones</a>
                             <ul>
                                 <li>
-                                    <a href="">Postulantes</a>
-                                </li>
-                                <li>
-                                    <a href="">Procesados</a>
+                                    <a href="{{route('postulacion.index')}}">Postulantes</a>
                                 </li>
                                 <!-- <li>
                                     <a class="nav-submenu" data-toggle="nav-submenu" href="#">More</a>
@@ -150,7 +146,7 @@
                             <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-layers"></i>Listados</a>
                             <ul>
                                 <li>
-                                    <a href="">Viajes Aprobados</a>
+                                    <a href="{{route('periodos')}}">Periodos</a>
                                 </li>
                             </ul>
                         </li>
@@ -208,10 +204,7 @@
                             <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-layers"></i>Postulaciones</a>
                             <ul>
                                 <li>
-                                    <a href="">Postulantes</a>
-                                </li>
-                                <li>
-                                    <a href="">Procesados</a>
+                                    <a href="{{route('postulacion.index')}}">Postulantes</a>
                                 </li>
                                 <!-- <li>
                                     <a class="nav-submenu" data-toggle="nav-submenu" href="#">More</a>
@@ -230,7 +223,7 @@
                             <a class="nav-submenu" data-toggle="nav-submenu" href="#"><i class="si si-layers"></i>Listados</a>
                             <ul>
                                 <li>
-                                    <a href="">Viajes Aprobados</a>
+                                    <a href="{{route('periodos')}}">Periodos</a>
                                 </li>
                             </ul>
                         </li>

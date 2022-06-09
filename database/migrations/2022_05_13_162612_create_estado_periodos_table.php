@@ -18,6 +18,14 @@ return new class extends Migration
             $table->string('nombre_estado');
             $table->timestamps();
         });
+        //datos de prueba
+        $data = [
+            ['nombre_estado'=>'Habilitado'],
+            ['nombre_estado'=>'Deshabilitado']
+        ];
+
+        DB::table("estado_periodos")->insert($data);
+        //fin datos prueba
     }
 
     /**

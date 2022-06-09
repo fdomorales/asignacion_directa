@@ -19,6 +19,13 @@ return new class extends Migration
             $table->string('descripcion_tipo_periodo');
             $table->timestamps();
         });
+        //datos de prueba
+        $data = [
+            ['nombre_tipo_periodo'=>'Nacional', 'descripcion_tipo_periodo'=>''],
+            ['nombre_tipo_periodo'=>'Regional', 'descripcion_tipo_periodo'=>'']
+        ];
+        DB::table("tipo_periodos")->insert($data);
+        //fin datos prueba
     }
 
     /**

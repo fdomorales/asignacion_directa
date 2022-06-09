@@ -31,9 +31,9 @@
                 <form action="{{route('actualizar_periodo', ['id' => $periodo->id])}}" method="POST">
                     @method('PATCH')
                     @csrf
-                    <!-- @error('descripcion')
+                    {{-- <!-- @error('descripcion')
                         <h6 class="alert alert-danger">{{$message}}</h6>
-                    @enderror -->
+                    @enderror --> --}}
                     @if ($errors->any())
                         <div class="alert alert-warning">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -64,12 +64,11 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-6">
-                            <label>Región</label>
-                            <!-- <input type="text" name="region" class="form-control bg-white " value="{{$periodo->nombre_region}}"> -->
-                            <select class="form-select" name="region" value="{{$periodo->region_id}}">
-                                <option value="{{$periodo->region_id}}" selected  hidden>{{$periodo->nombre_region}}</option>
-                                    @foreach ($regiones as $region)
-                                        <option value="{{$region->id}}">{{$region->nombre_region}}</option>
+                            <label>Tipo Periodo</label>
+                            <select class="form-select" name="tipo_periodos" id="tipo_periodos">
+                                <option value="{{$periodo->tipo_periodos_id}}" selected  hidden>{{$periodo->nombre_tipo_periodo}}</option>
+                                    @foreach ($tipo_periodo as $tipo)
+                                        <option value="{{$tipo->id}}">{{$tipo->nombre_tipo_periodo}}</option>
                                     @endforeach
                             </select>
                         </div>
@@ -82,14 +81,27 @@
                                     @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-sm-6">
-                            <label>Tipo Periodo</label>
-                            <select class="form-select" name="tipo_periodos" >
-                                <option value="{{$periodo->tipo_periodos_id}}" selected  hidden>{{$periodo->nombre_tipo_periodo}}</option>
-                                    @foreach ($tipo_periodo as $tipo)
-                                        <option value="{{$tipo->id}}">{{$tipo->nombre_tipo_periodo}}</option>
+                        <div class="form-group col-sm-6" id="select_region" 
+                            @if ($periodo->tipo_periodos_id == 1)
+                                style="display: none"
+                            @else
+                            style="display: block"
+                            @endif >
+                            <label>Región</label>
+                            
+                            <select class="form-select" id="regiones" name="regiones[]" multiple  style="width: 100%">
+                                
+                                    @foreach ($regiones as $region)
+                                        <option value="{{$region->id}}" 
+                                            @foreach ($regiones_periodo as $region_periodo)
+                                                @if ($region_periodo->id == $region->id)
+                                                    selected
+                                                @endif
+                                                
+                                            @endforeach
+                                            >{{$region->nombre_region}}</option>                                       
                                     @endforeach
-                            </select>
+                              </select>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -99,4 +111,20 @@
         </div>
         <!-- END Latest Orders -->
     </div>
+    <script>
+        const select_tipo = document.getElementById("tipo_periodos");
+        const select_region = document.getElementById("select_region");
+        select_tipo.addEventListener("change", function() {
+        if (this.value === "1") {
+            select_region.style.display = "none";
+        }
+        else {
+            select_region.style.display = "block";
+        }
+        });
+
+    </script>
+    <script type="text/javascript">
+        $('#regiones').select2();
+    </script>
 @endsection
