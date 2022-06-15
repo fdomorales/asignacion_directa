@@ -40,50 +40,6 @@
 </head>
 <body>
 
-    <!-- Page Container -->
-        <!--
-            Available classes for #page-container:
-
-        GENERIC
-
-            'enable-cookies'                            Remembers active color theme between pages (when set through color theme helper Template._uiHandleTheme())
-
-        SIDEBAR & SIDE OVERLAY
-
-            'sidebar-r'                                 Right Sidebar and left Side Overlay (default is left Sidebar and right Side Overlay)
-            'sidebar-mini'                              Mini hoverable Sidebar (screen width > 991px)
-            'sidebar-o'                                 Visible Sidebar by default (screen width > 991px)
-            'sidebar-o-xs'                              Visible Sidebar by default (screen width < 992px)
-            'sidebar-inverse'                           Dark themed sidebar
-
-            'side-overlay-hover'                        Hoverable Side Overlay (screen width > 991px)
-            'side-overlay-o'                            Visible Side Overlay by default
-
-            'enable-page-overlay'                       Enables a visible clickable Page Overlay (closes Side Overlay on click) when Side Overlay opens
-
-            'side-scroll'                               Enables custom scrolling on Sidebar and Side Overlay instead of native scrolling (screen width > 991px)
-
-        HEADER
-
-            ''                                          Static Header if no class is added
-            'page-header-fixed'                         Fixed Header
-
-        HEADER STYLE
-
-            ''                                          Classic Header style if no class is added
-            'page-header-modern'                        Modern Header style
-            'page-header-inverse'                       Dark themed Header (works only with classic Header style)
-            'page-header-glass'                         Light themed Header with transparency by default
-                                                        (absolute position, perfect for light images underneath - solid light background on scroll if the Header is also set as fixed)
-            'page-header-glass page-header-inverse'     Dark themed Header with transparency by default
-                                                        (absolute position, perfect for dark images underneath - solid dark background on scroll if the Header is also set as fixed)
-
-        MAIN CONTENT LAYOUT
-
-            ''                                          Full width Main Content if no class is added
-            'main-content-boxed'                        Full width Main Content with a specific maximum width (screen width > 1200px)
-            'main-content-narrow'                       Full width Main Content with a percentage width (screen width > 1200px)
-        -->
         <div id="page-container" class="sidebar-inverse side-scroll page-header-fixed page-header-glass page-header-inverse main-content-boxed">
 
             <!-- Sidebar -->
@@ -166,7 +122,7 @@
                 <div class="content-header-section">
                     <!-- Logo -->
                     <div class="content-header-item mr-5">
-                        <a class="link-effect font-w600" href="index.html" style="font-size: 70px;">
+                        <a class="link-effect font-w600" href="{{'/'}}" style="font-size: 70px;">
                             <img class="content-header-logo" src="{{ asset('img/franja_chile.png') }}">
 
                             {{-- <span class="text-dual-primary-dark">code</span><span class="text-primary">base</span> --}}
@@ -174,12 +130,7 @@
                     </div>
                     <!-- END Logo -->
 
-                    <!-- Open Search Section -->
-                    <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                    <button type="button" class="btn btn-rounded btn-dual-secondary" data-toggle="layout" data-action="header_search_on">
-                        <i class="fa fa-search mr-5"></i> Buscar
-                    </button>
-                    <!-- END Open Search Section -->
+                    
                 </div>
                 <!-- END Left Section -->
 
@@ -193,6 +144,7 @@
                         If your sidebar menu includes headings, they won't be visible in your header navigation by default
                         If your sidebar menu includes icons and you would like to hide them, you can add the class 'nav-main-header-no-icons'
                     -->
+                    @if (auth()->user())
                     <ul class="nav-main-header">
                         <li>
                             <a class="active" href="{{ asset('/') }}"><i class="si si-globe"></i>Inicio</a>
@@ -228,6 +180,8 @@
                             </ul>
                         </li>
                     </ul>
+                    @endif
+                    
                     <!-- END Header Navigation -->
 
                     <!-- Toggle Sidebar -->
@@ -240,31 +194,6 @@
                 <!-- END Right Section -->
             </div>
             <!-- END Header Content -->
-
-            <!-- Header Search -->
-            <div id="page-header-search" class="overlay-header">
-                <div class="content-header content-header-fullrow">
-                    <form>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <!-- Close Search Section -->
-                                <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                                <button type="button" class="btn btn-secondary px-15" data-toggle="layout" data-action="header_search_off">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                                <!-- END Close Search Section -->
-                            </div>
-                            <input type="text" class="form-control" placeholder="Buscar o salir con ESC.." id="page-header-search-input" name="page-header-search-input">
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-secondary px-15">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <!-- END Header Search -->
 
             <!-- Header Loader -->
             <div id="page-header-loader" class="overlay-header bg-primary">
@@ -292,9 +221,27 @@
                             </h1>
                         </div>
                         <div class="col-md py-10 d-md-flex align-items-md-center justify-content-md-end text-center">
+                            @if ( auth()->user() )
                             <button type="button" class="btn btn-alt-primary">
-                                <i class="si si-user"></i> Fernando
+                                <i class="si si-user"></i>  {{ auth()->user()->name }}
                             </button>
+                                
+                            @else
+                            <a type="button" class="btn btn-alt-primary" href="{{route('login')}}">
+                                <i class="si si-user"></i>  Ingresar
+                            </a>
+                                
+                            @endif
+                            &nbsp;
+                            @if (auth()->user())
+                            <form action="{{route('logout')}}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="si si-logout"></i> salir
+                                </button>
+                            </form>
+                                
+                            @endif
                         </div>
                     </div>
                 </div>
