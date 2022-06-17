@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Periodo;
 use App\Models\Postulacion;
+use App\Models\Organizacion;
 use App\Models\EstadoPostulacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -57,15 +58,22 @@ class PostulacionController extends Controller
             'periodo'=>'required',
             'cupos'=>'required',
             'acepta_terminos_y_condiciones'=>'required',
-            'documento'=> 'required'
+            'documento'=> 'required',
+            'nombre_organizacion'=> 'required|max:50',
+            'telefono_organizacion'=> 'required|digits:9',
+            'correo_organizacion'=> 'required|email'
         ]);
+        $organizacion = new Organizacion;
+        $organizacion->nombre_organizacion = $request->nombre_organizacion;
+        $organizacion->correo_organizacion = $request->correo_organizacion;
+        $organizacion->telefono_organizacion = $request->telefono_organizacion;
+        $organizacion->comuna_id = '1';
+        $organizacion->save();
+
         $postulacion = new Postulacion;
         $postulacion->cupos = $request->cupos;
         $postulacion->recibe_info = $request->recibe_info;
         $postulacion->estado_postulacion_id = '2';
-        //$postulacion->nombre_documento = $request->file('documento')->getClientOriginalName();
-        //$periodo_region = Periodo::where('id', $request->periodo)->first()->region_id;
-        //$postulacion->region_id = $periodo_region;
 
         $archivo = $request->file('documento')->store('files_');
         $nombre_documento = $request->file('documento')->getClientOriginalName();
@@ -77,11 +85,10 @@ class PostulacionController extends Controller
         $postulacion->hash_documento = bcrypt($token);
 
         
-        $postulacion->comuna_id = 1;
+        $postulacion->comuna_id = $organizacion->comuna_id;
         $postulacion->periodo_id = $request->periodo;
-        $postulacion->organizacion_id = 1;
+        $postulacion->organizacion_id = $organizacion->id;
         $postulacion->save();
-        //$request->documento->store('public/uploads/');
 
         return redirect()->route('postulacion.index')->with('success', 'Postulación correcta');
 
@@ -95,7 +102,7 @@ class PostulacionController extends Controller
      */
     public function show($id)
     {
-        $postulacion = Postulacion::with(['estado_postulacion', 'region', 'organizacion', 'periodo'])->find($id);
+        $postulacion = Postulacion::with(['estado_postulacion', 'region', 'organizacion', 'periodo', 'organizacion'])->find($id);
         
         $periodos = Periodo::all();
         $estado_postulacion = EstadoPostulacion::all();
@@ -123,7 +130,20 @@ class PostulacionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request -> validate([
+            'nombre_organizacion'=> 'required|max:50',
+            'telefono_organizacion'=> 'required|digits:9',
+            'correo_organizacion'=> 'required|email'
+        ]);
         $postulacion_actualizada = Postulacion::find($id);
+        $organizacion =  Organizacion::find($postulacion_actualizada->organizacion_id);
+
+        $organizacion->nombre_organizacion = $request->nombre_organizacion;
+        $organizacion->correo_organizacion = $request->correo_organizacion;
+        $organizacion->telefono_organizacion = $request->telefono_organizacion;
+        $organizacion->comuna_id = '1';
+        $organizacion->save();
+
         $postulacion_actualizada->cupos = $request->cupos;
         $postulacion_actualizada->periodo_id = $request->periodo;
         $postulacion_actualizada->estado_postulacion_id = $request->estado_postulacion;

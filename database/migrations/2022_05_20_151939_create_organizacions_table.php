@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_organizacion');
             $table->string('correo_organizacion');
+            $table->string('telefono_organizacion');
             $table->bigInteger('comuna_id')->unsigned();
             $table->timestamps();
         });

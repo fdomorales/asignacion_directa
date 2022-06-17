@@ -228,7 +228,12 @@
                                 
                             @else
                             <a type="button" class="btn btn-alt-primary" href="{{route('login')}}">
-                                <i class="si si-user"></i>  Ingresar
+                                <i class="si si-login"></i>  Ingresar
+                            </a>
+                            &nbsp;
+                            
+                            <a type="button" class="btn btn-alt-success" href="{{route('register')}}">
+                                <i class="si si-user"></i>  Registrarse
                             </a>
                                 
                             @endif

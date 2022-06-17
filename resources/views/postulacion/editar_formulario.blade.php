@@ -46,8 +46,23 @@
 
                         <div class="row">
                             <div class="form-group ">
-                                <label>Organización</label>
-                                <input type="text" disabled class="form-control" value="Nombre de la organización">
+                                <label>Nombre organización</label>
+                                <input type="text" name="nombre_organizacion" class="form-control" value="{{$postulacion->organizacion->nombre_organizacion}}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group ">
+                                <label>Teléfono de contacto</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">+56</span>
+                                    <input type="text" name="telefono_organizacion" class="form-control" value="{{$postulacion->organizacion->telefono_organizacion}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group ">
+                                <label>Correo</label>
+                                <input type="text" name="correo_organizacion" class="form-control" value="{{$postulacion->organizacion->correo_organizacion}}">
                             </div>
                         </div>
                         <div class="row">
@@ -89,7 +104,7 @@
                     <div class="my-10">
                         <label >Documento adjunto</label>
                         <a  href="{{route('postulacion_documento', $postulacion->token_documento)}}"  target="_blank">{{$postulacion->nombre_documento}}</a>
-                    </div>22.2266312, 69.9178488
+                    </div>
                 </div>
             </div>
         </div>

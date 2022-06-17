@@ -48,8 +48,23 @@
 
                         <div class="row">
                             <div class="form-group ">
-                                <label>Organización</label>
-                                <input type="text" disabled class="form-control" value="Nombre de la organización">
+                                <label>Nombre organización</label>
+                                <input type="text" name="nombre_organizacion"  class="form-control" value="{{ old('nombre_organizacion') }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group ">
+                                <label>Teléfono de contacto</label>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" id="basic-addon1">+56</span>
+                                    <input type="text" name="telefono_organizacion" class="form-control" value="{{ old('telefono_organizacion') }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group ">
+                                <label>Correo</label>
+                                <input type="text" name="correo_organizacion" class="form-control" value="{{ old('correo_organizacion') }}">
                             </div>
                         </div>
                         <div class="row">
