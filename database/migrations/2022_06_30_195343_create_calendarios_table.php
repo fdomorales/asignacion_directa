@@ -13,14 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('provincias', function (Blueprint $table) {
+        Schema::create('calendarios', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_provincia');
-            $table->string('codigo_provincia');
-            $table->string('estado_provincia');
+            $table->string('estado_calendario');
+            $table->bigInteger('periodo_id')->unsigned();
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('provincias');
+        Schema::dropIfExists('calendarios');
     }
 };

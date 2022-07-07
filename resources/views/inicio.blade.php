@@ -104,6 +104,9 @@
                                 <li>
                                     <a href="{{route('periodos')}}">Periodos</a>
                                 </li>
+                                <li>
+                                    <a href="{{route('organizacion.index')}}">Organizaciones</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -176,6 +179,12 @@
                             <ul>
                                 <li>
                                     <a href="{{route('periodos')}}">Periodos</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('organizacion.index')}}">Organizaciones</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('calendario.index')}}">Calendarios</a>
                                 </li>
                             </ul>
                         </li>

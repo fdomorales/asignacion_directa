@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Organizacion;
+use App\Models\Region;
+use App\Models\Provincia;
+use App\Models\Comuna;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -20,8 +24,11 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
+        $regiones = Region::all();
+        $provincias = Provincia::all();
+        $comunas = Comuna::all();
         //return view('auth.register');
-        return view('login.register');
+        return view('login.register', ['regiones'=> $regiones, 'provincias'=>$provincias, 'comunas'=>$comunas]);
     }
 
     /**
@@ -37,7 +44,13 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'telefono_organizacion' => ['required', 'digits:9'],
+            'comuna' => ['required'],
+            'password' => ['required', 'confirmed', Rules\Password::min(3)],
+            /* min(8)
+            ->mixedCase()
+            ->letters()
+            ->numbers()], */
         ]);
 
         $user = User::create([
@@ -45,6 +58,13 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        $new_organization = new Organizacion;
+        $new_organization->nombre_organizacion = $request->name;
+        $new_organization->correo_organizacion = $request->email;
+        $new_organization->telefono_organizacion = $request->telefono_organizacion;
+        $new_organization->comuna_id = $request->comuna;
+        $new_organization->user_id = $user->id;
+        $new_organization->save();
 
         event(new Registered($user));
 

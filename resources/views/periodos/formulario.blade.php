@@ -31,8 +31,8 @@
                     <form action="{{ route('periodos') }}" method="POST">
                         @csrf
                         <!-- @error('descripcion')
-        <h6 class="alert alert-danger">{{ $message }}</h6>
-    @enderror -->
+                            <h6 class="alert alert-danger">{{ $message }}</h6>
+                        @enderror -->
                         @if ($errors->any())
                             <div class="alert alert-warning">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -93,19 +93,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-sm-6" id="select_region2" style="display: none">
-                                <label for="">Región</label>
-                                <select class="form-select" name="regiones[]" multiple size="{{ count($regiones) }}">
-                                    <option value="" selected disabled hidden></option>
-                                    @foreach ($regiones as $region)
-                                        <option value="{{ $region->id }}">{{ $region->nombre_region }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-6"   id="select_region" style="display: none;">
+                            <div class="form-group col-sm-6"   id="select_region" >
                                 <label for="">Región</label><br>
                                 <select class="form-select" id="regiones" name="regiones[]" multiple="multiple"  style="width: 100%">
                                     @foreach ($regiones as $region)
@@ -121,7 +109,7 @@
         </div>
         <!-- END Latest Orders -->
     </div>
-    <script>
+    {{-- <script>
         const select_tipo = document.getElementById("tipo_periodos");
         const select_region = document.getElementById("select_region");
         select_tipo.addEventListener("change", function() {
@@ -131,7 +119,7 @@
                 select_region.style.display = "block";
             }
         });
-    </script>
+    </script> --}}
     <script type="text/javascript">
         $('#regiones').select2();
     </script>

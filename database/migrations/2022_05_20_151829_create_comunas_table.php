@@ -20,12 +20,6 @@ return new class extends Migration
             $table->string('estado_comuna');
             $table->timestamps();
         });
-        //datos de prueba
-        /* $data = [
-            ['nombre_comuna'=>'Comuna de prueba', 'codigo_comuna'=>'', 'estado_comuna'=>'']
-        ];
-        DB::table("comunas")->insert($data); */
-        //fin datos prueba
     }
 
     /**

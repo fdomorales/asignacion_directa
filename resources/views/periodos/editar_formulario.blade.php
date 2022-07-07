@@ -82,11 +82,7 @@
                             </select>
                         </div>
                         <div class="form-group col-sm-6" id="select_region" 
-                            @if ($periodo->tipo_periodos_id == 1)
-                                style="display: none"
-                            @else
-                            style="display: block"
-                            @endif >
+                             >
                             <label>Región</label>
                             
                             <select class="form-select" id="regiones" name="regiones[]" multiple  style="width: 100%">
@@ -99,7 +95,7 @@
                                                 @endif
                                                 
                                             @endforeach
-                                            >{{$region->nombre_region}}</option>                                       
+                                            >{{$region->nombre_region}}</option>
                                     @endforeach
                               </select>
                         </div>
@@ -111,7 +107,7 @@
         </div>
         <!-- END Latest Orders -->
     </div>
-    <script>
+    {{-- <script>
         const select_tipo = document.getElementById("tipo_periodos");
         const select_region = document.getElementById("select_region");
         select_tipo.addEventListener("change", function() {
@@ -123,7 +119,7 @@
         }
         });
 
-    </script>
+    </script> --}}
     <script type="text/javascript">
         $('#regiones').select2();
     </script>

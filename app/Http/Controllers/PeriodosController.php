@@ -160,12 +160,7 @@ class PeriodosController extends Controller
                 $nuevo_periodo_region->save();
             }
         }
-        if ($periodo_a_editar->tipo_periodos_id == 1){
-            $periodos_regiones_delete = PeriodoRegion::where('periodo_id','=',$id)->get();
-            foreach ($periodos_regiones_delete as $periodo_region_delete){
-                $periodo_region_delete->delete();
-            }
-        }
+        
 
         return redirect()->route('periodos')->with('success', 'Periodo actualizado');
     }
@@ -182,5 +177,12 @@ class PeriodosController extends Controller
         $periodo_a_borrar->delete();
 
         return redirect()->route('periodos')->with('success', 'Periodo borrado');
+    }
+
+    public function prueba()
+    {
+        $regiones = Region::with('provincia')->get();
+
+        return $regiones;
     }
 }

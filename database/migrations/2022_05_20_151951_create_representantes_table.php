@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_representante');
             $table->string('telefono_representante');
+            $table->string('correo_representante');
             $table->bigInteger('organizacion_id')->unsigned();
             $table->timestamps();
         });

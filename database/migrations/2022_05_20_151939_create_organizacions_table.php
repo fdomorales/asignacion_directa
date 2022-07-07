@@ -19,14 +19,9 @@ return new class extends Migration
             $table->string('correo_organizacion');
             $table->string('telefono_organizacion');
             $table->bigInteger('comuna_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
             $table->timestamps();
         });
-        //datos de prueba
-        /* $data = [
-            ['nombre_organizacion'=>'Organización de prueba', 'correo_organizacion'=> 'prueba@prueba.cl', 'comuna_id'=>1]
-        ];
-        DB::table("organizaciones")->insert($data); */
-        //fin datos prueba
     }
 
     /**

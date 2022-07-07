@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('provincias', function (Blueprint $table) {
+        Schema::create('viajes', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_provincia');
-            $table->string('codigo_provincia');
-            $table->string('estado_provincia');
+            $table->string('origen_viaje');
+            $table->string('destino_viaje');
+            $table->date('inicio_viaje');
+            $table->date('fin_viaje');
+            $table->string('estado_viaje');
+            $table->bigInteger('calendario_id')->unsigned();
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('provincias');
+        Schema::dropIfExists('viajes');
     }
 };

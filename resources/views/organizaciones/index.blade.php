@@ -4,7 +4,7 @@
     <div class="content">
         <nav class="breadcrumb mb-0">
             <a class="breadcrumb-item" href="/">Inicio</a>
-            <span class="breadcrumb-item active">Postulaciones</span>
+            <span class="breadcrumb-item active">Organizaciones</span>
         </nav>
     </div>
 @endsection
@@ -16,7 +16,7 @@
         <div class="col-lg-10">
             <div class="block block-rounded block-bordered">
                 <div class="block-header">
-                    <h3 class="block-title text-uppercase">Postulaciones</h3>
+                    <h3 class="block-title text-uppercase">Organizaciones</h3>
                     <div class="block-options">
                         <!-- <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                             <i class="fa fa-edit"></i>
@@ -24,8 +24,8 @@
                         <button type="button" class="btn-block-option">
                             <i class="fa fa-trash"></i>
                         </button> -->
-                        <a href="{{ route('postulacion.create')}}">
-                        <button class="btn btn-primary">Nuevo</button></a>
+                        {{-- <a href="">
+                        <button class="btn btn-primary">Nuevo</button></a> --}}
                     </div>
                 </div>
                 <div class="block-content p-5">
@@ -40,50 +40,42 @@
                     <table class="table table-borderless table-hover table-striped mb-0">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Organización</th>
-                                <th>Periodo</th>
-                                <th class="d-none d-sm-table-cell">Cupos</th>
-                                <th class="text-right">Estado</th>
+                                <th >Nombre</th>
+                                <th>Correo</th>
+                                <th class="d-none d-sm-table-cell">Teléfono</th>
+                                <th class="d-none d-sm-table-cell">Comuna</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($postulaciones as $postulacion)
+                            @foreach ($organizaciones as $organizacion)
                             
-                            <tr >
-                                <td><span>{{$postulacion->id}}</span></td>  
+                            <tr >  
                                 <td>
-                                    <a href=""> <span >{{$postulacion->organizacion->nombre_organizacion}}</span></a>
+                                    <a href="{{route('organizacion.show', ['organizacion'=>$organizacion->id])}}"> <span >{{$organizacion->nombre_organizacion}}</span></a>
                                 </td>
                                 <td>
-                                    <span >{{$postulacion->periodo->descripcion}}</span>
+                                    <span >{{$organizacion->correo_organizacion}}</span>
                                 </td>
                                 <td>
-                                    <span >{{$postulacion->cupos}}</span>
+                                    <span >{{$organizacion->telefono_organizacion}}</span>
                                 </td>
-                                    <td class="text-right">
-                                        <span class="badge @switch($postulacion->estado_postulacion_id)
-                                            @case(2) badge-warning @break @case(1) badge-success @break @case(3) badge-danger @break @default badge-warning @endswitch ">
-                                            {{$postulacion->estado_postulacion->nombre_estado_postulacion}}
-                                        </span>
-                                    </td>
-                                <td class="text-right">
+                                <td>
+                                    <span class="text-black">{{$organizacion->comuna->nombre_comuna}}</span>
+                                </td>
+                                {{-- <td class="text-right">
                                     <div class="block-options">
-                                        <button type="button" class="btn-block-option" >
-                                            <a href="{{route('descarga_postulacion',['id'=>$postulacion->id])}}"><i class="fa fa-download"></i></a>
-                                        </button>
                                         <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                            <a href="{{route('postulacion.show',['postulacion'=>$postulacion->id])}}"><i class="fa fa-eye"></i></a>
+                                            <a href=""><i class="fa fa-edit"></i></a>
                                         </button>
-                                        <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-{{$postulacion->id}}">
+                                        <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-">
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </div>
-                                </td>
+                                </td> --}}
                             </tr>
 
                             <!-- Modal Delete -->
-                            <div class="modal fade p-0" id="Modal-{{$postulacion->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal fade p-0" id="Modal-" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
                                     <div class="modal-header">
@@ -93,11 +85,11 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        ¿Está seguro de desea eliminar la postulación de la organización {{$postulacion->organizacion->nombre_organizacion}}?
+                                        ¿Está seguro de desea eliminar la organización {{$organizacion->nombre_organizacion}}?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                        <form action="{{route('postulacion.destroy', ['postulacion'=>$postulacion->id])}}" method="POST">
+                                        <form action="{{route('organizacion.destroy', ['organizacion'=>$organizacion->id])}}" method="POST">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit" class="btn btn-primary">Sí, eliminar</button>
@@ -106,14 +98,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- End Modal -->    
+                            <!-- End Modal -->
+
                             @endforeach
+                            
                             
                         </tbody>
                     </table>
                 </div>
             </div>
-            {{$postulaciones->links('pagination::bootstrap-5')}}
+            {{-- {{$periodos->links('pagination::bootstrap-5')}} --}}
         </div>
         <!-- END Latest Orders -->
     </div>

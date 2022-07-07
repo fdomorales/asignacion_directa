@@ -8,6 +8,7 @@ use App\Models\Region;
 use App\Models\EstadoPeriodo;
 use App\Models\Postulacion;
 use App\Models\TipoPeriodo;
+use App\Models\Calendario;
 
 class Periodo extends Model
 {
@@ -24,5 +25,8 @@ class Periodo extends Model
     }
     public function tipo_periodos(){
         return $this->belongsTo(TipoPeriodo::class);
+    }
+    public function calendario(){
+        return $this->hasOne(Calendario::class);
     }
 }

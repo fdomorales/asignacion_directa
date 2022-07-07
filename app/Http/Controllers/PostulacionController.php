@@ -6,11 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Periodo;
 use App\Models\Postulacion;
 use App\Models\Organizacion;
+use App\Models\User;
+use App\Models\Region;
 use App\Models\EstadoPostulacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use App\Exports\PostulacionExports;
+use Excel;
 
 class PostulacionController extends Controller
 {
@@ -40,10 +45,17 @@ class PostulacionController extends Controller
      */
     public function create()
     {
-        $periodos = Periodo::with(['region'])->where('estado_periodos_id', 1)->get();
-        //$periodos = Periodo::where('id', 1)->first()->region_id;
+        $user_id =  Auth::id();
+        $usuario = User::with('organizacion')->find($user_id);
+
+        $comuna_usuario = User::with('organizacion')->find($user_id)->organizacion->comuna_id;
+
+        $periodo = Periodo::with(['region'])
+        ->join('periodo_region', 'periodos.id', '=', 'periodo_region.periodo_id')
+        ->where('region_id', $comuna_usuario)->where('estado_periodos_id', 1)
+        ->first();
         //return $periodos;
-        return view('postulacion.formulario',['periodos'=>$periodos]);
+        return view('postulacion.formulario',['periodo'=>$periodo, 'usuario'=>$usuario]);
     }
 
     /**
@@ -58,22 +70,26 @@ class PostulacionController extends Controller
             'periodo'=>'required',
             'cupos'=>'required',
             'acepta_terminos_y_condiciones'=>'required',
-            'documento'=> 'required',
-            'nombre_organizacion'=> 'required|max:50',
-            'telefono_organizacion'=> 'required|digits:9',
-            'correo_organizacion'=> 'required|email'
+            'documento'=> 'required'
         ]);
-        $organizacion = new Organizacion;
-        $organizacion->nombre_organizacion = $request->nombre_organizacion;
-        $organizacion->correo_organizacion = $request->correo_organizacion;
-        $organizacion->telefono_organizacion = $request->telefono_organizacion;
-        $organizacion->comuna_id = '1';
-        $organizacion->save();
+        $estado_postulacion = 2;
+        
+        $user_id =  Auth::id();
+        $usuario = User::with('organizacion')->find($user_id);
+        $comuna_usuario = User::with('organizacion')->find($user_id)->organizacion->comuna_id;
+        $region_usuario = DB::table('regiones')->join('provincias', 'regiones.id','=', 'provincias.region_id')
+        ->join('comunas', 'provincias.id','=', 'comunas.provincia_id')
+        ->where('comunas.id','=',$comuna_usuario)->select('regiones.id')->first()->id;
+        $periodo = Periodo::with(['region'])
+        ->join('periodo_region', 'periodos.id', '=', 'periodo_region.periodo_id')
+        ->where('region_id', $region_usuario)->where('estado_periodos_id', 1)
+        ->select('periodos.*')
+        ->first();
 
         $postulacion = new Postulacion;
         $postulacion->cupos = $request->cupos;
         $postulacion->recibe_info = $request->recibe_info;
-        $postulacion->estado_postulacion_id = '2';
+        $postulacion->estado_postulacion_id = $estado_postulacion;
 
         $archivo = $request->file('documento')->store('files_');
         $nombre_documento = $request->file('documento')->getClientOriginalName();
@@ -83,13 +99,12 @@ class PostulacionController extends Controller
         $token = md5( Str::random( '100' ) . date( 'YmdHis-siHdmY' ) );
         $postulacion->token_documento = $token;
         $postulacion->hash_documento = bcrypt($token);
-
         
-        $postulacion->comuna_id = $organizacion->comuna_id;
-        $postulacion->periodo_id = $request->periodo;
-        $postulacion->organizacion_id = $organizacion->id;
+        $postulacion->comuna_id = $comuna_usuario;
+        $postulacion->periodo_id = $periodo->id;
+        $postulacion->organizacion_id = $usuario->organizacion->id;
         $postulacion->save();
-
+        //return $postulacion;
         return redirect()->route('postulacion.index')->with('success', 'Postulación correcta');
 
     }
@@ -107,7 +122,7 @@ class PostulacionController extends Controller
         $periodos = Periodo::all();
         $estado_postulacion = EstadoPostulacion::all();
         //return $postulacion;
-        return view('postulacion.editar_formulario', ['postulacion'=>$postulacion,'periodos'=>$periodos, 'estado_postulacion'=>$estado_postulacion]);
+        return view('postulacion.detalle', ['postulacion'=>$postulacion,'periodos'=>$periodos, 'estado_postulacion'=>$estado_postulacion]);
     }
 
     /**
@@ -118,7 +133,13 @@ class PostulacionController extends Controller
      */
     public function edit($id)
     {
-        //
+        
+        $postulacion = Postulacion::with(['estado_postulacion', 'region', 'organizacion', 'periodo', 'organizacion'])->find($id);
+        
+        $periodos = Periodo::all();
+        $estado_postulacion = EstadoPostulacion::all();
+        //return $postulacion;
+        return view('postulacion.editar_formulario', ['postulacion'=>$postulacion,'periodos'=>$periodos, 'estado_postulacion'=>$estado_postulacion]);
     }
 
     /**
@@ -174,5 +195,24 @@ class PostulacionController extends Controller
         {
             return Storage::download($postulacion->ruta_documento, $postulacion->nombre_documento);
         }
+    }
+
+    public function aceptaPostulacion($id){
+        $postulacion_aprobar = Postulacion::find($id);
+        $postulacion_aprobar->estado_postulacion_id = 1;
+        $postulacion_aprobar->save();
+
+        return redirect()->route('postulacion.index')->with('success', 'Postulación Aprobada');
+    }
+    public function rechazaPostulacion($id){
+        $postulacion_rechazar = Postulacion::find($id);
+        $postulacion_rechazar->estado_postulacion_id = 3;
+        $postulacion_rechazar->save();
+
+        return redirect()->route('postulacion.index')->with('success', 'Postulación rechazada');
+    }
+
+    public function downloadPostulacion($id){
+        return Excel::download(new PostulacionExports($id), 'postulacion.xlsx');
     }
 }

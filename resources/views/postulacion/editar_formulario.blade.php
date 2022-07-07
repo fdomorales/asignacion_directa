@@ -5,7 +5,8 @@
         <nav class="breadcrumb mb-0">
             <a class="breadcrumb-item" href="/">Inicio</a>
             <a class="breadcrumb-item" href="{{route('postulacion.index')}}">Postulaciones</a>
-            <span class="breadcrumb-item active">Formulario</span>
+            <a class="breadcrumb-item" href="{{route('postulacion.show', ['postulacion'=>$postulacion->id])}}">Formulario</a>
+            <span class="breadcrumb-item active">Editar</span>
         </nav>
     </div>
 @endsection

@@ -3,7 +3,7 @@
 @section('breadcrumb')
     <div class="content">
         <nav class="breadcrumb mb-0">
-            <a class="breadcrumb-item" href="javascript:void(0)">Inicio</a>
+            <a class="breadcrumb-item" href="/">Inicio</a>
             <span class="breadcrumb-item active">Periodos</span>
         </nav>
     </div>
