@@ -20,7 +20,7 @@ class CalendarioController extends Controller
      */
     public function index()
     {
-        $calendarios = Calendario::with(['periodo'])->get();
+        $calendarios = Calendario::with(['periodo'])->paginate(5);
         return view('calendario.index', ['calendarios'=> $calendarios]);
     }
 

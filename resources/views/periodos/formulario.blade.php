@@ -100,6 +100,12 @@
                                         <option value="{{ $region->id }}" >{{ $region->nombre_region }}</option>
                                     @endforeach
                                 </select>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="check_regiones" onchange="checkbox_changed()">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                      Seleccionar todas las regiones
+                                    </label>
+                                  </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -122,5 +128,17 @@
     </script> --}}
     <script type="text/javascript">
         $('#regiones').select2();
+
+        var checkbox = document.getElementById("check_regiones");
+
+        function checkbox_changed() {
+            if (checkbox.checked == true) {
+                $('#regiones option').prop('selected', true);
+                $('#regiones').prop('disabled', true);
+            } else {
+                $('#regiones option').prop('selected', false);
+                $('#regiones').prop('disabled', false);
+            }
+        }
     </script>
 @endsection

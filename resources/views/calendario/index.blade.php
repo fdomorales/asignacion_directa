@@ -78,7 +78,7 @@
                     </table>
                 </div>
             </div>
-            {{-- {{$periodos->links('pagination::bootstrap-5')}} --}}
+            {{$calendarios->links('pagination::bootstrap-5')}}
         </div>
         <!-- END Latest Orders -->
     </div>

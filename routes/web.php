@@ -7,6 +7,7 @@ use App\Http\Controllers\OrganizacionController;
 use App\Http\Controllers\RepresentanteController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ViajesController;
+use App\Http\Controllers\EmailController;
 
 
 /*
@@ -47,6 +48,7 @@ Route::patch('postulacion/acepta/{id}', [PostulacionController::class, 'aceptaPo
 Route::patch('postulacion/rechaza/{id}', [PostulacionController::class, 'rechazaPostulacion'])->middleware(['auth', 'verified'])->name('rechazar_postulacion');
 Route::get('/descarga/{id}', [PostulacionController::class, 'downloadPostulacion'])->middleware(['auth', 'verified'])->name('descarga_postulacion');
 Route::get('postulacion/documento/{token}', [PostulacionController::class, 'getDocument'])->middleware(['auth', 'verified'])->name('postulacion_documento');
+Route::get('/sendmail', [EmailController::class, 'enviarNotificacionPostulacion'])->middleware(['auth', 'verified'])->name('mailPostulacion');
 
 Route::resources(['organizacion'=> OrganizacionController::class],  ['middleware' => ['auth', 'verified']]);
 

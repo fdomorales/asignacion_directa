@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Periodo;
 use App\Models\Postulacion;
 use App\Models\Organizacion;
+use App\Models\Representante;
 use App\Models\User;
 use App\Models\Region;
 use App\Models\EstadoPostulacion;
@@ -47,6 +48,7 @@ class PostulacionController extends Controller
     {
         $user_id =  Auth::id();
         $usuario = User::with('organizacion')->find($user_id);
+        $representantes = Representante::all()->where('organizacion_id','=', $usuario->organizacion->id);
 
         $comuna_usuario = User::with('organizacion')->find($user_id)->organizacion->comuna_id;
 
@@ -55,7 +57,7 @@ class PostulacionController extends Controller
         ->where('region_id', $comuna_usuario)->where('estado_periodos_id', 1)
         ->first();
         //return $periodos;
-        return view('postulacion.formulario',['periodo'=>$periodo, 'usuario'=>$usuario]);
+        return view('postulacion.formulario',['periodo'=>$periodo, 'usuario'=>$usuario, 'representantes'=> $representantes]);
     }
 
     /**
@@ -105,7 +107,8 @@ class PostulacionController extends Controller
         $postulacion->organizacion_id = $usuario->organizacion->id;
         $postulacion->save();
         //return $postulacion;
-        return redirect()->route('postulacion.index')->with('success', 'Postulación correcta');
+        //return redirect()->route('postulacion.index')->with('success', 'Postulación correcta');
+        return redirect()->route('mailPostulacion',['postulacion'=> $postulacion->id,'email'=> $usuario->email]);
 
     }
 
@@ -173,6 +176,7 @@ class PostulacionController extends Controller
         //return $postulacion_actualizada;
         return redirect()->route('postulacion.index')->with('success', 'Postulación actualizada');
     }
+
 
     /**
      * Remove the specified resource from storage.

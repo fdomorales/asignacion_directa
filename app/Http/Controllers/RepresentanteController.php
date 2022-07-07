@@ -47,7 +47,8 @@ class RepresentanteController extends Controller
         $representante->organizacion_id = $request->organizacion_id;
         $representante->save();
 
-        return redirect()->route('organizacion.show', ['organizacion'=>$request->organizacion_id]);
+        //return redirect()->route('organizacion.show', ['organizacion'=>$request->organizacion_id]);
+        return redirect()->back()->with('success', 'Representante agregado');
     }
 
     /**
@@ -91,7 +92,9 @@ class RepresentanteController extends Controller
         $representante_editar->correo_representante = $request->correo_representante;
         $representante_editar->telefono_representante = $request->telefono_representante;
         $representante_editar->save();
-        return redirect()->route('organizacion.show', ['organizacion'=>$request->organizacion_id])->with('success', 'Representante actualizado');
+        
+        //return redirect()->route('organizacion.show', ['organizacion'=>$request->organizacion_id])->with('success', 'Representante actualizado');
+        return redirect()->back()->with('success', 'Representante actualizado');
     }
 
     /**
@@ -103,8 +106,9 @@ class RepresentanteController extends Controller
     public function destroy($id)
     {
         $representante_eliminar = Representante::find($id);
-        $representante_eliminar->delete()->onDelete('cascade');
+        $representante_eliminar->delete();
 
-        return redirect()->route('organizacion.show', ['organizacion'=>$representante_eliminar->organizacion_id])->with('success', 'Representante eliminado');
+        //return redirect()->route('organizacion.show', ['organizacion'=>$representante_eliminar->organizacion_id])->with('success', 'Representante eliminado');
+        return redirect()->back()->with('success', 'Representante eliminado');
     }
 }
