@@ -12,6 +12,6 @@ class EmailController extends Controller
         $correo = new PostulacionEnviada($request);
         Mail::to($request->email)->send($correo);
 
-        return redirect()->route('postulacion.index')->with('success', 'Postulación correcta');
+        return redirect()->route('index_customer')->with('success', 'Postulación correcta');
     }
 }

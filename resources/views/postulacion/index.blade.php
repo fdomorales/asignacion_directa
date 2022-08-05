@@ -24,14 +24,24 @@
                         <button type="button" class="btn-block-option">
                             <i class="fa fa-trash"></i>
                         </button> -->
+                        @role('Customer')
                         <a href="{{ route('postulacion.create')}}">
                         <button class="btn btn-primary">Nuevo</button></a>
+                        @endrole
                     </div>
                 </div>
                 <div class="block-content p-5">
                     @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{session('success')}}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+                    @if (session('fail'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{session('fail')}}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -63,7 +73,7 @@
                                 </td>
                                     <td class="text-right">
                                         <span class="badge @switch($postulacion->estado_postulacion_id)
-                                            @case(2) badge-warning @break @case(1) badge-success @break @case(3) badge-danger @break @default badge-warning @endswitch ">
+                                            @case(2) badge-warning @break @case(1) badge-success @break @case(3) badge-danger @break @case(4) badge-primary @break @default badge-warning @endswitch ">
                                             {{$postulacion->estado_postulacion->nombre_estado_postulacion}}
                                         </span>
                                     </td>
@@ -75,9 +85,12 @@
                                         <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                                             <a href="{{route('postulacion.show',['postulacion'=>$postulacion->id])}}"><i class="fa fa-eye"></i></a>
                                         </button>
+                                        @can('postulaciones.destroy')
                                         <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-{{$postulacion->id}}">
                                             <i class="fa fa-trash"></i>
                                         </button>
+                                            
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

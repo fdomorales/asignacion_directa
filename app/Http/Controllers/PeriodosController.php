@@ -19,7 +19,7 @@ class PeriodosController extends Controller
      */
     public function index()
     {
-        $periodos = Periodo::with([ 'estado_periodos', 'tipo_periodos', 'region'])->paginate(5);
+        $periodos = Periodo::with([ 'estado_periodos', 'tipo_periodos', 'region'])->paginate(8);
         /* $periodos = DB::table('periodos')
         ->join('estado_periodos','periodos.estado_periodos_id','=', 'estado_periodos.id')
         ->join('regiones', 'periodos.region_id', '=', 'regiones.id')
@@ -134,6 +134,7 @@ class PeriodosController extends Controller
      */
     public function update(Request $request, $id)
     {
+        //return $request->regiones;
         $request -> validate([
             'descripcion'=>'required|min:3',
             'fecha_inicio'=>'required|date',
@@ -147,12 +148,13 @@ class PeriodosController extends Controller
         $periodo_a_editar->fecha_fin = $request->fecha_fin;
         $periodo_a_editar->tipo_periodos_id = $request->tipo_periodos;
         $periodo_a_editar->save();
-        
-        if ($request->regiones){
-            $periodos_regiones_delete = PeriodoRegion::where('periodo_id','=',$id)->get();
+
+        $periodos_regiones_delete = PeriodoRegion::where('periodo_id','=',$id)->get();
             foreach ($periodos_regiones_delete as $periodo_region_delete){
                 $periodo_region_delete->delete();
             }
+        if ($request->regiones){
+            
             foreach($request->regiones as $region){
                 $nuevo_periodo_region = new PeriodoRegion;
                 $nuevo_periodo_region->periodo_id = $id;
@@ -173,16 +175,17 @@ class PeriodosController extends Controller
      */
     public function destroy($id)
     {
-        $periodo_a_borrar = Periodo::find($id);
-        $periodo_a_borrar->delete();
+        try {
+            $periodo_a_borrar = Periodo::find($id);
+            $periodo_a_borrar->delete();
+    
+            return redirect()->route('periodos')->with('success', 'Periodo borrado');
 
-        return redirect()->route('periodos')->with('success', 'Periodo borrado');
+        } catch (\Illuminate\Database\QueryException $e){
+            //return $e->getMessage();
+            return redirect()->back()->with('fail', 'No se puede eliminar el periodo seleccionado');
+        }
+
     }
 
-    public function prueba()
-    {
-        $regiones = Region::with('provincia')->get();
-
-        return $regiones;
-    }
 }

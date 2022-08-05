@@ -20,7 +20,9 @@ return new class extends Migration
             $table->date('inicio_viaje');
             $table->date('fin_viaje');
             $table->string('estado_viaje');
+            $table->boolean('viaje_asignado');
             $table->bigInteger('calendario_id')->unsigned();
+            $table->bigInteger('postulacion_id')->nullable()->unsigned();
             $table->timestamps();
         });
     }

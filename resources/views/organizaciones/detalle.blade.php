@@ -4,7 +4,10 @@
     <div class="content">
         <nav class="breadcrumb mb-0">
             <a class="breadcrumb-item" href="/">Inicio</a>
+            @can('organizaciones.index')
             <a class="breadcrumb-item" href="{{ route('organizacion.index') }}">Organizaciones</a>
+                
+            @endcan
             <span class="breadcrumb-item active">{{$organizacion->nombre_organizacion}}</span>
         </nav>
     </div>
@@ -88,6 +91,7 @@
                                 </tr>
                                 <tr>
                                     <th>Nombre</th>
+                                    <th>Apellido</th>
                                     <th>Correo</th>
                                     <th class="d-none d-sm-table-cell">Teléfono</th>
                                 </tr>
@@ -97,6 +101,9 @@
                                 <tr >  
                                     <td>
                                         <span >{{$representante->nombre_representante}}</span>
+                                    </td>
+                                    <td>
+                                        <span >{{$representante->apellido_representante}}</span>
                                     </td>
                                     <td>
                                         <span >{{$representante->correo_representante}}</span>
@@ -141,6 +148,10 @@
                                                 <input type="text" class="form-control" name="nombre_representante" value="{{$representante->nombre_representante}}">
                                               </div>
                                               <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Apellido</label>
+                                                <input type="text" class="form-control" name="apellido_representante" value="{{$representante->apellido_representante}}">
+                                              </div>
+                                              <div class="form-group">
                                                 <label for="message-text" class="col-form-label">Correo</label>
                                                 <input type="text" class="form-control" name="correo_representante" value="{{$representante->correo_representante}}">
                                               </div>
@@ -172,7 +183,7 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            ¿Está seguro de desea eliminar el representante {{$representante->nombre_representante}} ?
+                                            ¿Está seguro de desea eliminar el representante {{$representante->nombre_representante}} {{$representante->apellido_representante}} ?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
@@ -206,6 +217,10 @@
                                           <div class="form-group">
                                             <label for="recipient-name" class="col-form-label">Nombre</label>
                                             <input type="text" class="form-control" name="nombre_representante" value="{{old('nombre_representante')}}">
+                                          </div>
+                                          <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Apellido</label>
+                                            <input type="text" class="form-control" name="apellido_representante" value="{{old('apellido_representante')}}">
                                           </div>
                                           <div class="form-group">
                                             <label for="message-text" class="col-form-label">Correo</label>

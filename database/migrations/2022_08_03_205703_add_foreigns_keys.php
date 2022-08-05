@@ -63,6 +63,12 @@ return new class extends Migration
         Schema::table('viajes', function (Blueprint $table) {
             
             $table->foreign('calendario_id')->references('id')->on('calendarios');
+            $table->foreign('postulacion_id')->references('id')->on('postulaciones');
+                  
+        });
+        Schema::table('pasajeros', function (Blueprint $table) {
+            
+            $table->foreign('viaje_id')->references('id')->on('viajes');
                   
         });
         //datos de prueba
@@ -74,11 +80,13 @@ return new class extends Migration
         ];
         DB::table("regiones")->insert($data_regiones);
         $data_provincias = [
-            ['nombre_provincia'=>'Provincia de prueba', 'codigo_provincia'=>' ', 'estado_provincia'=>' ', 'region_id' => '1']
+            ['nombre_provincia'=>'Provincia de prueba111', 'codigo_provincia'=>' ', 'estado_provincia'=>' ', 'region_id' => '1'],
+            ['nombre_provincia'=>'Provincia de prueba222', 'codigo_provincia'=>' ', 'estado_provincia'=>' ', 'region_id' => '2']
         ];
         DB::table("provincias")->insert($data_provincias);
         $data_comunas = [
-            ['nombre_comuna'=>'Comuna de prueba', 'codigo_comuna'=>'', 'estado_comuna'=>'', 'provincia_id'=>'1']
+            ['nombre_comuna'=>'Comuna de prueba111', 'alias_comuna'=>'alias 1', 'codigo_comuna'=>'', 'estado_comuna'=>'', 'provincia_id'=>'1'],
+            ['nombre_comuna'=>'Comuna de prueba222', 'alias_comuna'=>'alias 2', 'codigo_comuna'=>'', 'estado_comuna'=>'', 'provincia_id'=>'2']
         ];
         DB::table("comunas")->insert($data_comunas);
         //fin datos prueba

@@ -37,11 +37,13 @@ class RepresentanteController extends Controller
     {
         $request -> validate([
             'nombre_representante'=>'required',
+            'apellido_representante'=>'required',
             'correo_representante'=>'required|email',
             'telefono_representante'=>'required|digits:9'
         ]);
         $representante = new Representante;
         $representante->nombre_representante = $request->nombre_representante;
+        $representante->apellido_representante = $request->apellido_representante;
         $representante->correo_representante = $request->correo_representante;
         $representante->telefono_representante = $request->telefono_representante;
         $representante->organizacion_id = $request->organizacion_id;
@@ -84,11 +86,13 @@ class RepresentanteController extends Controller
     {
         $request -> validate([
             'nombre_representante'=>'required',
+            'apellido_representante'=>'required',
             'correo_representante'=>'required|email',
             'telefono_representante'=>'required|digits:9'
         ]);
         $representante_editar = Representante::find($id);
         $representante_editar->nombre_representante = $request->nombre_representante;
+        $representante_editar->apellido_representante = $request->apellido_representante;
         $representante_editar->correo_representante = $request->correo_representante;
         $representante_editar->telefono_representante = $request->telefono_representante;
         $representante_editar->save();

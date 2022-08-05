@@ -98,6 +98,17 @@
                                             >{{$region->nombre_region}}</option>
                                     @endforeach
                               </select>
+                              <select hidden class="form-select" id="regiones_original" name="regiones_original[]" multiple="multiple"  style="width: 100%">
+                                @foreach ($regiones as $region_)
+                                    <option value="{{ $region_->id }}" >{{ $region_->nombre_region }}</option>
+                                @endforeach
+                            </select>
+                              <div class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="" id="check_regiones" onchange="checkbox_changed()">
+                                  <label class="form-check-label" for="flexCheckDefault">
+                                    Seleccionar todas las regiones
+                                  </label>
+                                </div>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -120,7 +131,35 @@
         });
 
     </script> --}}
+    
     <script type="text/javascript">
         $('#regiones').select2();
+        const regiones = $("#regiones option");
+        const regiones_original = $("#regiones_original option");
+        var checkbox = document.getElementById("check_regiones");
+        function checkbox_changed(){
+            if(checkbox.checked == true){
+                var selectedItems = [];
+                var allOptions = regiones;
+                $("#regiones").html(regiones);
+                selectedItems.splice(0,selectedItems.length);
+                allOptions.each(function() {
+                    selectedItems.push( $(this).val() );
+                });
+                $("#regiones").val(selectedItems).trigger("change"); 
+                $("#regiones").html(allOptions);
+            }else if(checkbox.checked == false){
+                var selectedItems = [];
+                var allOptions = regiones;
+                selectedItems.splice(0,selectedItems.length);
+                allOptions.each(function() {
+                    selectedItems.push('');
+                });
+                $("#regiones").val(selectedItems).trigger("change"); 
+                $("#regiones").val('').trigger("change"); 
+                $("#regiones").html(regiones_original);
+            }
+        }
+
     </script>
 @endsection

@@ -135,5 +135,8 @@ return [
         'password' => [
             'min' => 'La :attribute debe contener más de :min caracteres',
         ],
+        'fecha_nacimiento_pasajero' =>[
+            'before' => ':attribute debe ser una fecha anterior a hoy.'
+        ]
     ],
 ];

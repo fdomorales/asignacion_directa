@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Viaje;
+use App\Models\Postulacion;
+use App\Models\Organizacion;
+use App\Models\User;
+use App\Models\Pasajero;
+use Illuminate\Support\Facades\Auth;
 
 class ViajesController extends Controller
 {
@@ -14,7 +19,16 @@ class ViajesController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::id();
+        $organizacion = Organizacion::with('postulacion')->where('user_id', '=', $user)->first();
+        $postulacion = Postulacion::with(['periodo.calendario'])->where('organizacion_id', '=', $organizacion->id)->first();
+        $calendario_id = $postulacion->periodo->calendario->id;
+
+        $viajes = Viaje::with('postulacion', 'calendarios')->where('viaje_asignado', '=', 0)->where('calendario_id', '=', $calendario_id)->get();
+
+        //return $viajes;
+
+        return view('viajes.index', ['viajes'=>$viajes, 'postulacion'=> $postulacion]);
     }
 
     /**
@@ -46,7 +60,18 @@ class ViajesController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = Auth::id();
+        $organizacion = Organizacion::with('postulacion')->where('user_id', '=', $user)->first();
+        $postulacion = Postulacion::with(['periodo.calendario'])->where('organizacion_id', '=', $organizacion->id)->first();
+        $calendario_id = $postulacion->periodo->calendario->id;
+
+        $viaje = Viaje::with('postulacion', 'calendarios')->find($id);
+
+        $pasajeros = Pasajero::where('viaje_id', '=', $viaje->id)->get();
+
+        //return $pasajeros;
+
+        return view('viajes.detalle', ['organizacion'=>$organizacion, 'viaje'=> $viaje, 'pasajeros'=> $pasajeros]);
     }
 
     /**
@@ -91,5 +116,22 @@ class ViajesController extends Controller
         $viaje_eliminar->delete();
 
         return redirect()->back()->with('success', 'Viaje Eliminado');
+    }
+
+    
+    public function set_assignment(Request $request, $id)
+    {
+        
+        $user = Auth::id();
+        $organizacion = Organizacion::with('postulacion')->where('user_id', '=', $user)->first();
+        $postulacion = Postulacion::where('organizacion_id', '=', $organizacion->id)->first();
+
+        $viaje = Viaje::find($id);
+        $viaje->viaje_asignado = true;
+        $viaje->postulacion_id = $postulacion->id;
+        //return $viaje;
+        $viaje->save();
+
+        return redirect()->route('index_customer')->with('success', 'Viaje confirmado');
     }
 }

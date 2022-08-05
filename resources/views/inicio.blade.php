@@ -69,12 +69,26 @@
                     <!-- END Side Header -->
 
                     <!-- Side Main Navigation -->
+                    @if (auth()->user())
                     <div class="content-side content-side-full">
                         <!--
                         Mobile navigation, desktop navigation can be found in #page-header
 
                         If you would like to use the same navigation in both mobiles and desktops, you can use exactly the same markup inside sidebar and header navigation ul lists
                     -->
+                    @role('Customer')
+                    <ul class="nav-main">
+                        <li>
+                            <a class="active" href="{{ asset('/') }}"><i class="si si-rocket"></i>Inicio</a>
+                        </li>
+                        <li>
+                            <a href="{{route('index_customer')}}"><i class="si si-layers"></i>Mis postulaciones</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="si si-notebook"></i>Mis Datos</a>
+                        </li>
+                    </ul>
+                    @else
                     <ul class="nav-main">
                         <li>
                             <a class="active" href="{{ asset('/') }}"><i class="si si-rocket"></i>Inicio</a>
@@ -107,10 +121,19 @@
                                 <li>
                                     <a href="{{route('organizacion.index')}}">Organizaciones</a>
                                 </li>
+                                <li>
+                                    <a href="{{route('calendario.index')}}">Calendarios</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('comunas.index')}}">Comunas</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
+                    @endrole
+                    
                 </div>
+                @endif
                 <!-- END Side Main Navigation -->
             </div>
             <!-- Sidebar Content -->
@@ -148,6 +171,19 @@
                         If your sidebar menu includes icons and you would like to hide them, you can add the class 'nav-main-header-no-icons'
                     -->
                     @if (auth()->user())
+                    @role('Customer')
+                    <ul class="nav-main-header">
+                        <li>
+                            <a class="active" href="{{ asset('/') }}"><i class="si si-globe"></i>Inicio</a>
+                        </li>
+                        <li>
+                            <a href="{{route('index_customer')}}"><i class="si si-layers"></i>Mis Postulaciones</a>
+                        </li>
+                        <li>
+                            <a  href="{{route('show_customer', ['id'=> auth()->user()->id])}}"><i class="si si-notebook"></i>Mis Datos</a>
+                        </li>
+                    </ul>
+                    @else
                     <ul class="nav-main-header">
                         <li>
                             <a class="active" href="{{ asset('/') }}"><i class="si si-globe"></i>Inicio</a>
@@ -186,10 +222,14 @@
                                 <li>
                                     <a href="{{route('calendario.index')}}">Calendarios</a>
                                 </li>
+                                <li>
+                                    <a href="{{route('comunas.index')}}">Comunas</a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
-                    @endif
+                    @endrole
+                    
                     
                     <!-- END Header Navigation -->
 
@@ -199,6 +239,7 @@
                         <i class="fa fa-navicon"></i>
                     </button>
                     <!-- END Toggle Sidebar -->
+                    @endif
                 </div>
                 <!-- END Right Section -->
             </div>
@@ -275,6 +316,56 @@
                 </div> -->
                 <!-- END Breadcrumb -->
 
+                <div>
+                    <style>
+                        #loader {
+                            display: none;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            width: 100%;
+                            background: rgba(0,0,0,0) url("img/loading_pacman.gif") no-repeat center center;
+                            z-index: 99999;
+                            
+                        }
+                        .loading {
+                            z-index: 20;
+                            position: absolute;
+                            top: 0;
+                            left:-5px;
+                            width: 100%;
+                            height: 100%;
+                            background-color: rgba(0,0,0,0.4);
+                        }
+                        .loading-content {
+                            position: absolute;
+                            border: 16px solid #f3f3f3; /* Light grey */
+                            border-top: 16px solid #3498db; /* Blue */
+                            border-radius: 50%;
+                            width: 50px;
+                            height: 50px;
+                            top: 40%;
+                            left:35%;
+                            animation: spin 2s linear infinite;
+                            }
+                            
+                            @keyframes spin {
+                                0% { transform: rotate(0deg); }
+                                100% { transform: rotate(360deg); }
+                            }
+                        </style>
+                    
+                        <section id="loading">
+                            <div id="loading-content"></div>
+                        </section>
+                    
+                        <div>
+                            <div id='loader'></div>
+                        </div>
+                </div>
+
                 <!-- Content -->
                 <div class="content">
                     @yield('contenido')
@@ -318,6 +409,15 @@
             assets/js/core/jquery.countTo.min.js
             assets/js/core/js.cookie.min.js
         -->
+        <script>
+            $(function() {
+                $( "form" ).submit(function() {
+                    $('#loader').show();
+                    /* document.querySelector('#loading').classList.add('loading');
+                    document.querySelector('#loading-content').classList.add('loading-content'); */
+                });
+            });
+            </script>
         <script src="{{ asset('assets/js/codebase.core.min.js') }}"></script>
 
         <!--

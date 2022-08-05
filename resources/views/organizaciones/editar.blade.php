@@ -4,7 +4,10 @@
     <div class="content">
         <nav class="breadcrumb mb-0">
             <a class="breadcrumb-item" href="/">Inicio</a>
+            @can('organizacionrd.index')
             <a class="breadcrumb-item" href="{{ route('organizacion.index') }}">Organizaciones</a>
+                
+            @endcan
             <a class="breadcrumb-item" href="{{route('organizacion.show', ['organizacion'=> $organizacion->id])}}">{{$organizacion->nombre_organizacion}}</a>
             <span class="breadcrumb-item active">Editar</span>
         </nav>

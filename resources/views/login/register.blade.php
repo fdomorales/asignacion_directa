@@ -27,48 +27,35 @@
                             <div class="row">
                                 <div class="form-group col-sm-6">
                                     <label>Nombre Organización</label>
-                                    <input type="text"  class="form-control" name="name" :value="old('name')" required autofocus >
+                                    <input type="text"  class="form-control" name="name" value="{{old('name')}}" required autofocus >
                                 </div>
                                 <div class="form-group col-sm-6">
                                     <label>Correo Organización</label>
-                                    <input id="email" type="email" class="form-control" name="email"  :value="old('email')" required >
+                                    <input id="email" type="email" class="form-control" name="email"  value="{{old('email')}}" required >
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-sm-6">
+                                <div class="form-group col-sm-4">
                                     <label>Teléfono organización</label>
                                     <div class="input-group">
                                         <span class="input-group-text" >+56</span>
                                         <input type="text" name="telefono_organizacion"  class="form-control" value="{{ old('telefono_organizacion') }}">
                                     </div>
                                 </div>
-                                <div class="form-group col-sm-6">
+                                <div class="form-group col-sm-4">
                                     <label>Región</label>
-                                    <select class="form-select" id="region" name="region"  >
+                                    <select class="form-select" id="region" name="region" value={{old('region')}} >
                                         <option value="" selected disabled hidden></option>
                                         @foreach ($regiones as $region)
                                             <option value="{{ $region->id }}" >{{ $region->nombre_region }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-6">
-                                    <label>Provincia</label>
-                                    <select class="form-select" id="provincia" name="provincia"  >
-                                        <option value="" selected disabled hidden></option>
-                                        @foreach ($provincias as $provincia)
-                                            <option value="{{ $provincia->id }}" >{{ $provincia->nombre_provincia }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group col-sm-6">
+                                <div class="form-group col-sm-4">
                                     <label>Comuna</label>
-                                    <select class="form-select" id="comuna" name="comuna"  >
+                                    <select class="form-select" id="comuna" disabled name="comuna"  >
                                         <option value="" selected disabled hidden></option>
-                                        @foreach ($comunas as $comuna)
-                                            <option value="{{ $comuna->id }}" >{{ $comuna->nombre_comuna }}</option>
-                                        @endforeach
+                                        
                                     </select>
                                 </div>
                             </div>
@@ -96,4 +83,30 @@
             </div>
             <!-- END Latest Orders -->
         </div>
+
+        <script>
+            $(document).ready(function () 
+            {
+                var regiones =  {!! json_encode($regiones->toArray()) !!};
+
+                $('#region').change(function () {
+                    var valorRegion = $(this).val();
+                    regiones.map(region => {
+                        if (region.id == valorRegion) {
+                            region.provincia.map( provincia => {
+                                const opcion_vacia = '<option value="" selected disabled hidden></option>'
+                                const comunas_region = provincia.comuna.map(comuna =>{
+                                     return '<option value="' + comuna.id + '">' + comuna.nombre_comuna + '</option>';
+                                });
+                                const opciones = opcion_vacia + comunas_region
+                                $('#comuna').html(opciones);
+                            })
+                        }
+                        
+                    });
+                    $('#comuna').removeAttr("disabled");
+                });
+
+            });
+        </script>
     @endsection

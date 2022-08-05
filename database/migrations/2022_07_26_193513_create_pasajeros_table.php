@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('comunas', function (Blueprint $table) {
+        Schema::create('pasajeros', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_comuna');
-            $table->string('alias_comuna');
-            $table->string('codigo_comuna');
-            $table->string('estado_comuna');
+            $table->string('nombre_pasajero');
+            $table->string('apellido_pasajero');
+            $table->date('fecha_nacimiento_pasajero');
+            $table->string('direccion_pasajero');
+            $table->string('telefono_pasajero');
+            $table->string('contacto_pasajero');
+            $table->bigInteger('viaje_id')->unsigned();
             $table->timestamps();
         });
     }
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comunas');
+        Schema::dropIfExists('pasajeros');
     }
 };

@@ -24,9 +24,10 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        $regiones = Region::all();
+        $regiones = Region::with('provincia.comuna')->get();
         $provincias = Provincia::all();
         $comunas = Comuna::all();
+        //return $regiones;
         //return view('auth.register');
         return view('login.register', ['regiones'=> $regiones, 'provincias'=>$provincias, 'comunas'=>$comunas]);
     }
@@ -57,7 +58,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ]);
+        ])->assignRole('Customer');
         $new_organization = new Organizacion;
         $new_organization->nombre_organizacion = $request->name;
         $new_organization->correo_organizacion = $request->email;

@@ -10,10 +10,12 @@ class CalendarioImport implements ToModel, WithStartRow
 {
     protected $calendario_id;
     protected $estado_viaje;
+    protected $viaje_asignado;
 
     public function __construct($calendario_id){
         $this->calendario_id = $calendario_id;
         $this->estado_viaje = 1;
+        $this->viaje_asignado = false;
     }
     /**
      * @return int
@@ -36,6 +38,7 @@ class CalendarioImport implements ToModel, WithStartRow
             'inicio_viaje'=>$this->convertDate($row[2], $format_insert),
             'fin_viaje'=>$this->convertDate($row[3], $format_insert),
             'estado_viaje'=> $this->estado_viaje,
+            'viaje_asignado'=> $this->viaje_asignado,
             'calendario_id'=>$this->calendario_id,
 
         ]);

@@ -92,12 +92,21 @@
                             target="_blank">{{ $postulacion->nombre_documento }}</a>
                     </div>
                 </div>
+                @if ($postulacion->estado_postulacion->id == 1)
+                <div class="block-header">
+                    <div class="block-options">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalConfirm">Asignar viajes</button>
+                    </div>
+                </div>
+                @else
                 <div class="block-header">
                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDecline">Rechazar postulación</button>
                     <div class="block-options">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAcept">Aceptar postulación</button>
                     </div>
                 </div>
+                    
+                @endif
 
                 <!-- Modal Aceptar -->
                 <div class="modal fade" id="ModalAcept" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -116,6 +125,32 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                                 <form action="{{route('aceptar_postulacion', ['id'=> $postulacion->id])}}" method="POST">
+                                    @method('PATCH')
+                                    @csrf
+                                    <button type="submit" class="btn btn-primary">Sí, aceptar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Asignar viajes -->
+                <div class="modal fade" id="ModalConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Confirmación</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                ¿Está seguro que desea permitir tomar viajes a la organización {{$postulacion->organizacion->nombre_organizacion}}?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                <form action="{{route('asigna_viajes_postulacion', ['id'=> $postulacion->id])}}" method="POST">
                                     @method('PATCH')
                                     @csrf
                                     <button type="submit" class="btn btn-primary">Sí, aceptar</button>

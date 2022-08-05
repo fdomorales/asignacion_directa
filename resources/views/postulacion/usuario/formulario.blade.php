@@ -4,7 +4,7 @@
     <div class="content">
         <nav class="breadcrumb mb-0">
             <a class="breadcrumb-item" href="/">Inicio</a>
-            <a class="breadcrumb-item" href="{{route('postulacion.index')}}">Postulaciones</a>
+            <a class="breadcrumb-item" href="{{route('index_customer')}}">Postulaciones</a>
             <span class="breadcrumb-item active">Formulario</span>
         </nav>
     </div>
@@ -28,7 +28,7 @@
                                 </div> -->
                 </div>
                 <div class="block-content ">
-                    <form action="{{route('postulacion.store')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{route('store_by_customer')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @error('descripcion')
                             <h6 class="alert alert-danger">{{ $message }}</h6>

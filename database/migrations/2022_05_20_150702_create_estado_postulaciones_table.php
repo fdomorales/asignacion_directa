@@ -23,7 +23,8 @@ return new class extends Migration
         $data = [
             ['nombre_estado_postulacion'=>'Aprobado', 'descripcion_estado_postulacion' => ''],
             ['nombre_estado_postulacion'=>'Pendiente', 'descripcion_estado_postulacion' => ''],
-            ['nombre_estado_postulacion'=>'Rechazado', 'descripcion_estado_postulacion' => '']
+            ['nombre_estado_postulacion'=>'Rechazado', 'descripcion_estado_postulacion' => ''],
+            ['nombre_estado_postulacion'=>'Aprobado con cupos asignados', 'descripcion_estado_postulacion' => '']
         ];
         DB::table("estado_postulaciones")->insert($data);
         //fin datos prueba

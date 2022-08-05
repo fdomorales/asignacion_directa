@@ -1,10 +1,23 @@
 @extends('inicio')
 
 @section('contenido')
+
+
+
     <div class="row justify-content-center">
         <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
-                <div class="panel-heading mb-15">Iniciar Sesión</div>
+            <div>
+                @if ($regiones->count()>0)
+                    @foreach ($regiones as $region)
+                    {{$loop->first ? 'Regiones con convocatorias abiertas: ' : ''}}<strong>{{$region->nombre_region}}{{$loop->last ? '.' : ', '}}</strong>
+                    @endforeach
+                @else
+                    no hay regiones con peridos de postulacion abiertos
+                @endif
+            </div>
+            <div class="panel panel-default mt-20 ">
+
+                <div class="panel-heading mb-15 ">Iniciar Sesión</div>
 
                 <div class="panel-body">
                     <!-- Session Status -->
@@ -12,6 +25,7 @@
 
                     <!-- Validation Errors -->
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                    
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         @csrf
                         
@@ -62,4 +76,5 @@
             </div>
         </div>
     </div>
+    
     @endsection

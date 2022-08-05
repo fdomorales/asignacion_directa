@@ -128,17 +128,29 @@
     </script> --}}
     <script type="text/javascript">
         $('#regiones').select2();
-
+        const regiones = $("#regiones option");
+        var selectedItems = [];
+        var allOptions = regiones;
         var checkbox = document.getElementById("check_regiones");
-
-        function checkbox_changed() {
-            if (checkbox.checked == true) {
-                $('#regiones option').prop('selected', true);
-                $('#regiones').prop('disabled', true);
-            } else {
-                $('#regiones option').prop('selected', false);
-                $('#regiones').prop('disabled', false);
+        function checkbox_changed(){
+            if(checkbox.checked == true){
+                $("#regiones").html(regiones);
+                selectedItems.splice(0,selectedItems.length);
+                allOptions.each(function() {
+                    selectedItems.push( $(this).val() );
+                });
+                $("#regiones").val(selectedItems).trigger("change"); 
+                $("#regiones").html(allOptions);
+            }else if(checkbox.checked == false){
+                selectedItems.splice(0,selectedItems.length);
+                allOptions.each(function() {
+                    selectedItems.push('');
+                });
+                $("#regiones").val(selectedItems).trigger("change"); 
+                $("#regiones").val('').trigger("change"); 
+                $("#regiones").html(regiones);
             }
         }
+
     </script>
 @endsection

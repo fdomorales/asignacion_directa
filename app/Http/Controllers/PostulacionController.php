@@ -10,13 +10,18 @@ use App\Models\Representante;
 use App\Models\User;
 use App\Models\Region;
 use App\Models\EstadoPostulacion;
+use App\Models\Viaje;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Exports\PostulacionExports;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PostulacionAceptada;
+use App\Mail\PostulacionRechazada;
 use Excel;
+use PDF;
 
 class PostulacionController extends Controller
 {
@@ -39,6 +44,23 @@ class PostulacionController extends Controller
         return view('postulacion.index', ['postulaciones'=>$postulaciones]);
     }
 
+    public function index_customer()
+    {
+        $user_id = Auth::id();
+        $organizacion = Organizacion::with(['postulacion.periodo.estado_periodos', 'postulacion.viaje'])->where('user_id', '=', $user_id)->first();
+        $postulacion = Postulacion::with(['estado_postulacion', 'viaje'])->where('organizacion_id', '=', $organizacion->id)->first();
+        $viajes = Viaje::first();
+        
+        $viaje = [];
+        if($postulacion){
+            $viaje = Viaje::where('postulacion_id', '=', $postulacion->id)->first();
+        }
+
+        
+        //return $postulacion->viaje;
+        return view('postulacion.usuario.index', ['organizacion'=>$organizacion, 'postulacion'=> $postulacion, 'viaje'=> $viaje, 'viajes'=> $viajes]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -58,6 +80,21 @@ class PostulacionController extends Controller
         ->first();
         //return $periodos;
         return view('postulacion.formulario',['periodo'=>$periodo, 'usuario'=>$usuario, 'representantes'=> $representantes]);
+    }
+    public function create_by_customer()
+    {
+        $user_id =  Auth::id();
+        $usuario = User::with('organizacion')->find($user_id);
+        $representantes = Representante::all()->where('organizacion_id','=', $usuario->organizacion->id);
+
+        $comuna_usuario = User::with('organizacion')->find($user_id)->organizacion->comuna_id;
+
+        $periodo = Periodo::with(['region'])
+        ->join('periodo_region', 'periodos.id', '=', 'periodo_region.periodo_id')
+        ->where('region_id', $comuna_usuario)->where('estado_periodos_id', 1)
+        ->first();
+        //return $periodos;
+        return view('postulacion.usuario.formulario',['periodo'=>$periodo, 'usuario'=>$usuario, 'representantes'=> $representantes]);
     }
 
     /**
@@ -105,10 +142,70 @@ class PostulacionController extends Controller
         $postulacion->comuna_id = $comuna_usuario;
         $postulacion->periodo_id = $periodo->id;
         $postulacion->organizacion_id = $usuario->organizacion->id;
-        $postulacion->save();
-        //return $postulacion;
-        //return redirect()->route('postulacion.index')->with('success', 'Postulación correcta');
-        return redirect()->route('mailPostulacion',['postulacion'=> $postulacion->id,'email'=> $usuario->email]);
+        
+        $cantidad_representantes = $usuario->organizacion->representante->count();
+        if ($cantidad_representantes > 1){
+            $postulacion->save();
+            //return $postulacion;
+            //cambiar el redirect del email
+            return redirect()->route('mailPostulacion',['postulacion'=> $postulacion->id,'email'=> $usuario->email]);
+        }else{
+            return redirect()->back()->with('fail', 'Debe agregar al menos 2 reprentantes');
+        }
+        
+
+    }
+
+    public function store_by_customer(Request $request)
+    {
+        $request -> validate([
+            'periodo'=>'required',
+            'cupos'=>'required',
+            'acepta_terminos_y_condiciones'=>'required',
+            'documento'=> 'required'
+        ]);
+        $estado_postulacion = 2;
+        
+        $user_id =  Auth::id();
+        $usuario = User::with('organizacion')->find($user_id);
+        $comuna_usuario = User::with('organizacion')->find($user_id)->organizacion->comuna_id;
+        $region_usuario = DB::table('regiones')->join('provincias', 'regiones.id','=', 'provincias.region_id')
+        ->join('comunas', 'provincias.id','=', 'comunas.provincia_id')
+        ->where('comunas.id','=',$comuna_usuario)->select('regiones.id')->first()->id;
+        $periodo = Periodo::with(['region'])
+        ->join('periodo_region', 'periodos.id', '=', 'periodo_region.periodo_id')
+        ->where('region_id', $region_usuario)->where('estado_periodos_id', 1)
+        ->select('periodos.*')
+        ->first();
+
+        $postulacion = new Postulacion;
+        $postulacion->cupos = $request->cupos;
+        $postulacion->recibe_info = $request->recibe_info;
+        $postulacion->estado_postulacion_id = $estado_postulacion;
+
+        $archivo = $request->file('documento')->store('files_');
+        $nombre_documento = $request->file('documento')->getClientOriginalName();
+        $postulacion->nombre_documento = $nombre_documento;
+        $postulacion->ruta_documento = $archivo;
+
+        $token = md5( Str::random( '100' ) . date( 'YmdHis-siHdmY' ) );
+        $postulacion->token_documento = $token;
+        $postulacion->hash_documento = bcrypt($token);
+        
+        $postulacion->comuna_id = $comuna_usuario;
+        $postulacion->periodo_id = $periodo->id;
+        $postulacion->organizacion_id = $usuario->organizacion->id;
+        
+        $cantidad_representantes = $usuario->organizacion->representante->count();
+        if ($cantidad_representantes > 1){
+            $postulacion->save();
+            //return $postulacion;
+            //return redirect()->route('postulacion.index')->with('success', 'Postulación correcta');
+            return redirect()->route('mailPostulacion',['postulacion'=> $postulacion->id,'email'=> $usuario->email]);
+        }else{
+            return redirect()->back()->with('fail', 'Debe agregar al menos 2 reprentantes');
+        }
+        
 
     }
 
@@ -126,6 +223,15 @@ class PostulacionController extends Controller
         $estado_postulacion = EstadoPostulacion::all();
         //return $postulacion;
         return view('postulacion.detalle', ['postulacion'=>$postulacion,'periodos'=>$periodos, 'estado_postulacion'=>$estado_postulacion]);
+    }
+    public function show_by_customer($id)
+    {
+        $postulacion = Postulacion::with(['estado_postulacion', 'region', 'organizacion', 'periodo', 'organizacion'])->find($id);
+        
+        $periodos = Periodo::all();
+        $estado_postulacion = EstadoPostulacion::all();
+        //return $postulacion;
+        return view('postulacion.usuario.editar', ['postulacion'=>$postulacion,'periodos'=>$periodos, 'estado_postulacion'=>$estado_postulacion]);
     }
 
     /**
@@ -176,6 +282,16 @@ class PostulacionController extends Controller
         //return $postulacion_actualizada;
         return redirect()->route('postulacion.index')->with('success', 'Postulación actualizada');
     }
+    public function update_by_customer(Request $request, $id)
+    {
+        $postulacion_actualizada = Postulacion::find($id);
+        $postulacion_actualizada->cupos = $request->cupos;
+        $postulacion_actualizada->periodo_id = $request->periodo;
+        $postulacion_actualizada->save();
+
+        //return $postulacion_actualizada;
+        return redirect()->route('index_customer')->with('success', 'Postulación actualizada');
+    }
 
 
     /**
@@ -186,10 +302,18 @@ class PostulacionController extends Controller
      */
     public function destroy($id)
     {
-        $postulacion_a_borrar = Postulacion::find($id);
-        $postulacion_a_borrar->delete();
 
-        return redirect()->route('postulacion.index')->with('success', 'Postulación borrada');
+        
+        try {
+            $postulacion_a_borrar = Postulacion::find($id);
+            $postulacion_a_borrar->delete();
+    
+            return redirect()->route('postulacion.index')->with('success', 'Postulación borrada');
+
+        } catch (\Illuminate\Database\QueryException $e){
+            //return $e->getMessage();
+            return redirect()->back()->with('fail', 'No se puede eliminar la postulación');
+        }
     }
 
     public function getDocument($token)
@@ -203,20 +327,50 @@ class PostulacionController extends Controller
 
     public function aceptaPostulacion($id){
         $postulacion_aprobar = Postulacion::find($id);
+        $email_organizacion = Postulacion::join('organizaciones','postulaciones.organizacion_id', '=', 'organizaciones.id')
+        ->select('organizaciones.correo_organizacion')->first()->correo_organizacion;
         $postulacion_aprobar->estado_postulacion_id = 1;
         $postulacion_aprobar->save();
 
+        $correo = new PostulacionAceptada();
+        Mail::to($email_organizacion)->send($correo);
+
+        //return redirect()->route('postulacion.index')->with('success', 'Postulación Aprobada');
         return redirect()->route('postulacion.index')->with('success', 'Postulación Aprobada');
     }
     public function rechazaPostulacion($id){
         $postulacion_rechazar = Postulacion::find($id);
+        $email_organizacion = Postulacion::join('organizaciones','postulaciones.organizacion_id', '=', 'organizaciones.id')
+        ->select('organizaciones.correo_organizacion')->first()->correo_organizacion;
         $postulacion_rechazar->estado_postulacion_id = 3;
         $postulacion_rechazar->save();
+        
+        $correo = new PostulacionRechazada();
+        Mail::to($email_organizacion)->send($correo);
 
         return redirect()->route('postulacion.index')->with('success', 'Postulación rechazada');
+    }
+    public function asignarViajesPostulacion($id){
+        $postulacion = Postulacion::find($id);
+        /* $email_organizacion = Postulacion::join('organizaciones','postulaciones.organizacion_id', '=', 'organizaciones.id')
+        ->select('organizaciones.correo_organizacion')->first()->correo_organizacion; */
+        $postulacion->estado_postulacion_id = 4;
+        $postulacion->save();
+        
+        //$correo = new PostulacionRechazada();
+        //Mail::to($email_organizacion)->send($correo);
+
+        return redirect()->route('postulacion.index')->with('success', 'Viajes disponibles para la organización');
     }
 
     public function downloadPostulacion($id){
         return Excel::download(new PostulacionExports($id), 'postulacion.xlsx');
+    }
+
+    public function downloadPDFPostulacion($id){
+        $postulacion = Postulacion::find($id);
+        $pdf = PDF::loadview('postulacion.usuario.pdf_postulacion', compact('postulacion'));
+
+        return $pdf->download('postulacion.pdf');
     }
 }
