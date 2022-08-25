@@ -14,18 +14,10 @@
     <!-- More Data -->
     <div class="row justify-content-center">
         <!-- Latest Orders -->
-        <div class="col-7">
+        <div class="col-12 col-sm-7">
             <div class="block block-rounded block-bordered p-5">
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Nueva Postulación</h3>
-                    <!-- <div class="block-options">
-                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                        <i class="si si-refresh"></i>
-                                    </button>
-                                    <button type="button" class="btn-block-option">
-                                        <i class="si si-wrench"></i>
-                                    </button>
-                                </div> -->
                 </div>
                 <div class="block-content ">
                     <form action="{{route('store_by_customer')}}" method="POST" enctype="multipart/form-data">
@@ -84,57 +76,61 @@
                             </div>
                         </div>
                         <hr>
-                        <table class="table table-borderless table-hover table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <h3 class="block-title text-uppercase">Representantes</h3>
-                                    <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-create">
-                                        <i class="fa fa-plus-circle"></i>
-                                    </button>
-
-                                </tr>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>Correo</th>
-                                    <th class="d-none d-sm-table-cell">Teléfono</th>
-                                </tr>
-                            </thead>
-
-                            {{-- table representantes --}}
-                            <tbody>
-                                @foreach ($representantes as $representante)
-                                <tr >  
-                                    <td>
-                                        <span >{{$representante->nombre_representante}}</span>
-                                    </td>
-                                    <td>
-                                        <span >{{$representante->apellido_representante}}</span>
-                                    </td>
-                                    <td>
-                                        <span >{{$representante->correo_representante}}</span>
-                                    </td>
-                                    <td>
-                                        <span >{{$representante->telefono_representante}}</span>
-                                    </td>
-                                    <td class="text-right">
-                                        <div class="block-options">
-                                            {{-- <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                                <a href=""><i class="fa fa-edit"></i></a>
-                                            </button> --}}
-                                            <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-edit-{{$representante->id}}">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-delete-{{$representante->id}}">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-    
-                            </tbody>
-                        </table>
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <table class="table table-borderless table-hover table-responsive-sm table-responsive-md table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <h3 class="block-title text-uppercase">Representantes</h3>
+                                            <a href="" data-toggle="modal" data-target="#Modal-create"><i class="fa fa-plus-circle"></i> Agregar representante </a>
+        
+                                        </tr>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Apellido</th>
+                                            <th>Correo</th>
+                                            <th class="d-none d-sm-table-cell">Teléfono</th>
+                                        </tr>
+                                    </thead>
+        
+                                    {{-- table representantes --}}
+                                    <tbody>
+                                        @foreach ($representantes as $representante)
+                                        <tr >  
+                                            <td>
+                                                <span >{{$representante->nombre_representante}}</span>
+                                            </td>
+                                            <td>
+                                                <span >{{$representante->apellido_representante}}</span>
+                                            </td>
+                                            <td>
+                                                <span >{{$representante->correo_representante}}</span>
+                                            </td>
+                                            <td class="">
+                                                <span >{{$representante->telefono_representante}}</span>
+                                            </td>
+                                            <td class="text-right">
+                                                <div class="block-options">
+                                                    {{-- <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                                        <a href=""><i class="fa fa-edit"></i></a>
+                                                    </button> --}}
+                                                    <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-edit-{{$representante->id}}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                    <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-delete-{{$representante->id}}">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+            
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                        
                         <hr>
                         {{-- end table representantes --}}
 
@@ -142,10 +138,12 @@
                         <div class="row">
                             <div class="form-group ">
                                 <label>Periodo</label>
-                                <select class="form-select" name="periodo" >
+                                <input type="text" disabled class="form-control" value="{{$periodo->descripcion}} / {{$periodo->fecha_inicio}} - {{$periodo->fecha_fin}}">
+                                <input type="text" name="periodo" hidden  value="{{$periodo->id}}">
+                                {{-- <select class="form-select" name="periodo" >
                                     <option value="" selected disabled hidden></option>
                                         <option value="{{$periodo->id}}">{{$periodo->descripcion}} / {{$periodo->fecha_inicio}}</option>
-                                </select>
+                                </select> --}}
                             </div>
                         </div>
                         <div class="row">
@@ -196,7 +194,7 @@
                     @foreach ($representantes as $representante)
                         <!-- Modal Editar -->
                         <div class="modal fade p-0" id="Modal-edit-{{$representante->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Editar datos</h5>
@@ -241,7 +239,7 @@
 
                         <!-- Modal Delete -->
                         <div class="modal fade p-0" id="Modal-delete-{{$representante->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Eliminar</h5>
@@ -267,7 +265,7 @@
                     @endforeach
                     <!-- Modal create representante -->
                     <div class="modal fade p-0" id="Modal-create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Agregar representante</h5>

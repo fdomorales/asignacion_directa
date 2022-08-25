@@ -32,6 +32,8 @@
     
     <link rel="stylesheet" id="css-theme" href="{{ asset('assets/css/themes/corporate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css') }}"/>
+    @yield('css')
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>{{-- cambiar CDN --}}
     <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <!-- END Stylesheets -->
@@ -85,7 +87,7 @@
                             <a href="{{route('index_customer')}}"><i class="si si-layers"></i>Mis postulaciones</a>
                         </li>
                         <li>
-                            <a href="#"><i class="si si-notebook"></i>Mis Datos</a>
+                            <a href="{{route('show_customer', ['id'=> auth()->user()->id])}}"><i class="si si-notebook"></i>Mis Datos</a>
                         </li>
                     </ul>
                     @else
@@ -127,6 +129,14 @@
                                 <li>
                                     <a href="{{route('comunas.index')}}">Comunas</a>
                                 </li>
+                                <li>
+                                    <a href="{{route('viaje.index')}}">Viajes</a>
+                                </li>
+                                @role('Admin')
+                                    <li>
+                                        <a href="{{route('usuarios.index')}}">Usuarios</a>
+                                    </li>
+                                @endrole
                             </ul>
                         </li>
                     </ul>
@@ -225,6 +235,14 @@
                                 <li>
                                     <a href="{{route('comunas.index')}}">Comunas</a>
                                 </li>
+                                <li>
+                                    <a href="{{route('viaje.index')}}">Viajes</a>
+                                </li>
+                                @role('Admin')
+                                <li>
+                                    <a href="{{route('usuarios.index')}}">Usuarios</a>
+                                </li>
+                                @endrole
                             </ul>
                         </li>
                     </ul>
@@ -368,6 +386,8 @@
 
                 <!-- Content -->
                 <div class="content">
+                    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
                     @yield('contenido')
                 </div>
                 <!-- END Content -->
@@ -432,6 +452,12 @@
         <script src="{{ asset('assets/js/plugins/chartjs/Chart.bundle.min.js') }}"></script>
 
         <!-- Page JS Code -->
-        <script src="{{ asset('assets/js/pages/db_corporate.min.js') }}"></script>
+        <script src="{{ asset('assets/js/pages/db_corporate.min.js') }}" ></script>
+
+        
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" defer></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js" defer></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js" defer></script>
+    <script src="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap5.min.js" defer></script>
     </body>
     </html>

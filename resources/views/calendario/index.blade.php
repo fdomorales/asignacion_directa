@@ -13,19 +13,15 @@
     <!-- More Data -->
     <div class="row justify-content-center">
         <!-- Latest Orders -->
-        <div class="col-lg-10">
+        <div class="col-12">
             <div class="block block-rounded block-bordered">
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Calendarios</h3>
                     <div class="block-options">
-                        <!-- <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button type="button" class="btn-block-option">
-                            <i class="fa fa-trash"></i>
-                        </button> -->
-                        <a href="{{route('calendario.create')}}">
-                        <button class="btn btn-primary">Nuevo</button></a>
+                        @role('Admin')
+                            <a href="{{route('calendario.create')}}">
+                            <button class="btn btn-primary">Nuevo</button></a>
+                        @endrole
                     </div>
                 </div>
                 <div class="block-content p-5">
@@ -37,13 +33,13 @@
                             </button>
                         </div>
                     @endif
-                    <table class="table table-borderless table-hover table-striped mb-0">
+                    <table class="table table-responsive-sm table-borderless table-hover table-striped mb-0">
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Periodo calendario</th>
                                 <th>Fecha creación</th>
-                                <th class="d-none d-sm-table-cell">Estado</th>
+                                <th class="">Estado</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,15 +56,17 @@
                                     <span >{{$calendario->created_at}}</span>
                                 </td>
                                 <td>
-                                    @if ($calendario->estado_calendario == 1)
+                                    @if ($calendario->estado_calendario == 0)
                                     <span class=" badge badge-warning">Cargado</span>
                                     @else
                                     <span class=" badge badge-success">Procesado</span>
                                     @endif
                                 </td>
-                                <td>
-                                    <a href="{{route('calendario.show',['calendario'=>$calendario->id])}}">ver</a>
-                                </td>
+                                @role('Admin')
+                                    <td>
+                                        <a href="{{route('calendario.show',['calendario'=>$calendario->id])}}">ver</a>
+                                    </td>
+                                @endrole
                             </tr>
 
                             @endforeach

@@ -19,14 +19,14 @@ class PeriodosController extends Controller
      */
     public function index()
     {
-        $periodos = Periodo::with([ 'estado_periodos', 'tipo_periodos', 'region'])->paginate(8);
+        $periodos = Periodo::with([ 'estado_periodos', 'tipo_periodos', 'region'])->paginate(10);
         /* $periodos = DB::table('periodos')
         ->join('estado_periodos','periodos.estado_periodos_id','=', 'estado_periodos.id')
         ->join('regiones', 'periodos.region_id', '=', 'regiones.id')
         ->select('periodos.*','nombre_estado', 'nombre_region')
         ->get(); */
         
-        //return ($periodos);
+        //return ($periodos_r);
         return view('periodos.index', ['periodos' => $periodos]);
     }
 
@@ -186,6 +186,10 @@ class PeriodosController extends Controller
             return redirect()->back()->with('fail', 'No se puede eliminar el periodo seleccionado');
         }
 
+    }
+
+    public function prueba(){
+        return view('prueba');
     }
 
 }

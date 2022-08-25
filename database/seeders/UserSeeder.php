@@ -21,8 +21,8 @@ class UserSeeder extends Seeder
             'email_verified_at' => '2022-07-22 16:47:23'
         ])->assignRole('Admin');
 
-        User::factory(4)->create()->each(function ($user) {
-            $user->assignRole('Customer');
+        User::factory(10)->create()->each(function ($user) {
+            $user->assignRole('Observador');
         });
     }
 }

@@ -109,10 +109,18 @@ class RepresentanteController extends Controller
      */
     public function destroy($id)
     {
-        $representante_eliminar = Representante::find($id);
-        $representante_eliminar->delete();
 
-        //return redirect()->route('organizacion.show', ['organizacion'=>$representante_eliminar->organizacion_id])->with('success', 'Representante eliminado');
-        return redirect()->back()->with('success', 'Representante eliminado');
+        
+        try {
+            $representante_eliminar = Representante::find($id);
+            $representante_eliminar->delete();
+    
+            //return redirect()->route('organizacion.show', ['organizacion'=>$representante_eliminar->organizacion_id])->with('success', 'Representante eliminado');
+            return redirect()->back()->with('success', 'Representante eliminado');
+
+        } catch (\Illuminate\Database\QueryException $e){
+            //return $e->getMessage();
+            return redirect()->back()->with('fail', 'No se puede eliminar el representante');
+        }
     }
 }

@@ -13,6 +13,9 @@ class OrganizacionController extends Controller
     public function __construct()
     {
         $this->middleware('can:organizaciones.index')->only('index');
+        $this->middleware('can:organizaciones.show')->only('show');
+        $this->middleware('can:organizaciones.edit')->only('edit');
+        $this->middleware('can:organizaciones.update')->only('update');
         $this->middleware('can:organizaciones.destroy')->only('destroy');
     }
     /**
@@ -22,7 +25,7 @@ class OrganizacionController extends Controller
      */
     public function index()
     {
-        $organizaciones = Organizacion::with([ 'comuna'])->paginate(5);
+        $organizaciones = Organizacion::with([ 'comuna'])->paginate(15);
         //return $organizaciones;
         return view('organizaciones.index', ['organizaciones' => $organizaciones] );
     }
@@ -104,22 +107,11 @@ class OrganizacionController extends Controller
         $organizacion_editar->telefono_organizacion = $request->telefono_organizacion;
         //$organizacion_editar->comuna_id = $request->comuna_id;
         $organizacion_editar->save();
-        return redirect()->route('organizacion.show', ['organizacion'=>$id])->with('success', 'Organización actualizada');
-    }
-    public function update_organization(Request $request, $id)
-    {
-        $request -> validate([
-            'nombre_organizacion'=>'required|min:3',
-            'correo_organizacion'=>'required|email',
-            'telefono_organizacion'=>'required|digits:9'
-        ]);
-        $organizacion_editar = Organizacion::find($id);
-        $organizacion_editar->nombre_organizacion = $request->nombre_organizacion;
-        $organizacion_editar->correo_organizacion = $request->correo_organizacion;
-        $organizacion_editar->telefono_organizacion = $request->telefono_organizacion;
-        //$organizacion_editar->comuna_id = $request->comuna_id;
-        $organizacion_editar->save();
-        return redirect()->back('organizacion.show', ['organizacion'=>$id])->with('success', 'Organización actualizada');
+        if(auth()->user()->hasRole('Customer')){
+            return redirect()->route('show_customer', ['id'=>$id])->with('success', 'Organización actualizada');
+        }else{
+            return redirect()->route('organizacion.show', ['organizacion'=>$id])->with('success', 'Organización actualizada');
+        }
     }
 
     /**

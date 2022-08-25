@@ -8,6 +8,7 @@ use App\Models\Postulacion;
 use App\Models\Organizacion;
 use App\Models\Representante;
 use App\Models\User;
+use App\Models\Comuna;
 use App\Models\Region;
 use App\Models\EstadoPostulacion;
 use App\Models\Viaje;
@@ -25,6 +26,19 @@ use PDF;
 
 class PostulacionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:postulaciones.index')->only('index');
+        $this->middleware('can:postulaciones.create')->only('create');
+        $this->middleware('can:postulaciones.store')->only('store');
+        $this->middleware('can:postulaciones.show')->only('show');
+        $this->middleware('can:postulaciones.edit')->only('edit');
+        $this->middleware('can:postulaciones.update')->only('update');
+        $this->middleware('can:postulaciones.destroy')->only('destroy');
+        $this->middleware('can:postulaciones.aceptaPostulacion')->only('aceptaPostulacion');
+        $this->middleware('can:postulaciones.rechazaPostulacion')->only('rechazaPostulacion');
+        $this->middleware('can:postulaciones.aceptaPostulacion')->only('aceptaPostulacion');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +46,7 @@ class PostulacionController extends Controller
      */
     public function index()
     {
-        $postulaciones = Postulacion::with(['estado_postulacion', 'region', 'organizacion', 'periodo'])->paginate(5); 
+        $postulaciones = Postulacion::with(['estado_postulacion', 'region', 'organizacion', 'periodo', 'viaje'])->orderBy('created_at', 'asc')->get(); 
         /* $postulaciones = DB::table('postulaciones')
         ->join('estado_postulaciones','postulaciones.estado_postulacion_id', '=', 'estado_postulaciones.id')
         ->join('organizaciones', 'postulaciones.organizacion_id', '=', 'organizaciones.id')
@@ -52,13 +66,15 @@ class PostulacionController extends Controller
         $viajes = Viaje::first();
         
         $viaje = [];
+        $numero_pasajeros = 0;
         if($postulacion){
-            $viaje = Viaje::where('postulacion_id', '=', $postulacion->id)->first();
+            $viaje = Viaje::where('postulacion_id', '=', $postulacion->id)->with('pasajeros')->first();
+            if($viaje){
+                $numero_pasajeros = count($viaje->pasajeros);
+            }
         }
 
-        
-        //return $postulacion->viaje;
-        return view('postulacion.usuario.index', ['organizacion'=>$organizacion, 'postulacion'=> $postulacion, 'viaje'=> $viaje, 'viajes'=> $viajes]);
+        return view('postulacion.usuario.index', ['organizacion'=>$organizacion, 'postulacion'=> $postulacion, 'viaje'=> $viaje, 'viajes'=> $viajes, 'numero_pasajeros'=> $numero_pasajeros]);
     }
 
     /**
@@ -88,10 +104,11 @@ class PostulacionController extends Controller
         $representantes = Representante::all()->where('organizacion_id','=', $usuario->organizacion->id);
 
         $comuna_usuario = User::with('organizacion')->find($user_id)->organizacion->comuna_id;
+        $region_usuario = Comuna::with('provincia')->find($comuna_usuario)->provincia->region_id;
 
         $periodo = Periodo::with(['region'])
         ->join('periodo_region', 'periodos.id', '=', 'periodo_region.periodo_id')
-        ->where('region_id', $comuna_usuario)->where('estado_periodos_id', 1)
+        ->where('region_id', $region_usuario)->where('estado_periodos_id', 1)
         ->first();
         //return $periodos;
         return view('postulacion.usuario.formulario',['periodo'=>$periodo, 'usuario'=>$usuario, 'representantes'=> $representantes]);
@@ -302,17 +319,29 @@ class PostulacionController extends Controller
      */
     public function destroy($id)
     {
-
         
-        try {
-            $postulacion_a_borrar = Postulacion::find($id);
-            $postulacion_a_borrar->delete();
-    
-            return redirect()->route('postulacion.index')->with('success', 'Postulación borrada');
+        $postulacion_a_borrar = Postulacion::find($id);
 
-        } catch (\Illuminate\Database\QueryException $e){
-            //return $e->getMessage();
-            return redirect()->back()->with('fail', 'No se puede eliminar la postulación');
+        if(auth()->user()->hasRole('Customer')){
+            try {
+                $postulacion_a_borrar->delete();
+        
+                return redirect()->back()->with('success', 'Postulación borrada');
+    
+            } catch (\Illuminate\Database\QueryException $e){
+                //return $e->getMessage();
+                return redirect()->back()->with('fail', 'No se puede eliminar la postulación');
+            }
+        }elseif(auth()->user()->hasRole('Admin')){
+            try {
+                $postulacion_a_borrar->delete();
+        
+                return redirect()->route('postulacion.index')->with('success', 'Postulación borrada');
+    
+            } catch (\Illuminate\Database\QueryException $e){
+                //return $e->getMessage();
+                return redirect()->back()->with('fail', 'No se puede eliminar la postulación');
+            }
         }
     }
 
@@ -351,10 +380,12 @@ class PostulacionController extends Controller
         return redirect()->route('postulacion.index')->with('success', 'Postulación rechazada');
     }
     public function asignarViajesPostulacion($id){
+
+        $estado_postulacion_asignado = 4;
         $postulacion = Postulacion::find($id);
         /* $email_organizacion = Postulacion::join('organizaciones','postulaciones.organizacion_id', '=', 'organizaciones.id')
         ->select('organizaciones.correo_organizacion')->first()->correo_organizacion; */
-        $postulacion->estado_postulacion_id = 4;
+        $postulacion->estado_postulacion_id = $estado_postulacion_asignado;
         $postulacion->save();
         
         //$correo = new PostulacionRechazada();

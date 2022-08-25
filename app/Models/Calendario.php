@@ -16,6 +16,6 @@ class Calendario extends Model
         return $this->belongsTo(Periodo::class);
     }
     public function viajes(){
-        return $this->hasMany(Viaje::class);
+        return $this->hasMany(Viaje::class, 'calendario_id', 'id');
     }
 }

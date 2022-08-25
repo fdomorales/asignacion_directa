@@ -84,9 +84,7 @@
                             <thead>
                                 <tr>
                                     <h3 class="block-title text-uppercase">Representantes</h3>
-                                    <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-create">
-                                        <i class="fa fa-plus-circle"></i>
-                                    </button>
+                                    <a href="" data-toggle="modal" data-target="#Modal-create"><i class="fa fa-plus-circle"></i> Agregar representante </a>
 
                                 </tr>
                                 <tr>
@@ -113,9 +111,6 @@
                                     </td>
                                     <td class="text-right">
                                         <div class="block-options">
-                                            {{-- <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                                <a href=""><i class="fa fa-edit"></i></a>
-                                            </button> --}}
                                             <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-edit-{{$representante->id}}">
                                                 <i class="fa fa-edit"></i>
                                             </button>
@@ -129,7 +124,7 @@
 
                                 <!-- Modal Editar -->
                                 <div class="modal fade p-0" id="Modal-edit-{{$representante->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">Editar datos</h5>
@@ -174,7 +169,7 @@
 
                                 <!-- Modal Delete -->
                                 <div class="modal fade p-0" id="Modal-delete-{{$representante->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">Eliminar</h5>
@@ -202,7 +197,7 @@
     
                                <!-- Modal create representante -->
                                <div class="modal fade p-0" id="Modal-create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Agregar representante</h5>

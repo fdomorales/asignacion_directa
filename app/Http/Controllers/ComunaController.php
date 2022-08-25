@@ -8,6 +8,13 @@ use App\Models\Provincia;
 
 class ComunaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:calendarios.index')->only('index');
+        $this->middleware('can:calendarios.store')->only('store');
+        $this->middleware('can:calendarios.update')->only('update');
+        $this->middleware('can:calendarios.destroy')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -86,7 +93,6 @@ class ComunaController extends Controller
         $comuna = Comuna::find($id);
         $comuna->nombre_comuna = $request->nombre_comuna;
         $comuna->alias_comuna = $request->alias_comuna;
-        $comuna->provincia_id = $request->provincia;
         $comuna->save();
 
         return redirect()->back()->with('success', 'Comuna actualizada');

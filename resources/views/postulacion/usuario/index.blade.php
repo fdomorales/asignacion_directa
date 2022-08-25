@@ -67,13 +67,7 @@
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Postulaciones</h3>
                     <div class="block-options">
-                        <!-- <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button type="button" class="btn-block-option">
-                            <i class="fa fa-trash"></i>
-                        </button> -->
-                        @if (!isset($organizacion->postulacion[0]))
+                        @if (!@isset($postulacion))
                         <a href="{{ route('create_by_customer')}}">
                             <button class="btn btn-primary">Nuevo</button></a>
                              
@@ -105,42 +99,73 @@
                               <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-12 col-sm-6">
+                                        <div class="col-12 col-sm-4">
                                             <h5 class="card-title">{{$organizacion->nombre_organizacion}}</h5>
                                             <p class="card-text">Fecha de creación: {{$organizacion->created_at}}</p>
                                             <p class="card-text">Cupos: {{$postulacion->cupos}} </p>
                                         </div>
-                                        <div class="col-12 col-sm-6">
+                                        <div class="col-12 col-sm-8">
                                             <div class="mt-10">
                                                 <p><strong class="alert 
                                                     @switch($postulacion->estado_postulacion->id)
                                                     @case(2) alert-warning @break
                                                     @case(1) alert-success @break
                                                     @case(3) alert-danger @break
+                                                    @case(4) alert-primary @break
                                                     @default
                                                     @endswitch ">{{$postulacion->estado_postulacion->nombre_estado_postulacion}}</strong>
                                                 </p>
                                             </div>
-                                            @if ($postulacion->estado_postulacion->id == 4 && !$viaje && @isset($viajes) )
-                                            <a href="{{ route('viaje.index')}}">
-                                                <button class="btn btn-primary">Elegir viaje</button>
-                                            </a>
-                                            @else
-                                            <p>Debe esperar que se abran los cupos para tomar viajes</p>
+                                            @if ($postulacion->estado_postulacion->id == 4  )
+                                                @if (!$viaje && @isset($viajes))
+                                                <a href="{{ route('viaje.index')}}">
+                                                    <button class="btn btn-primary">Elegir viaje</button>
+                                                </a>
+                                                @else 
+                                                <p>Debe esperar que se abran los cupos para tomar viajes</p>
+                                                @endif
                                             @endif
+
+                                            @switch($postulacion->estado_postulacion->id)
+                                                @case(2)
+                                                    <p>Debe esperar que su postulación sea evaluada</p>
+                                                    @break
+                                                @case(3)
+                                                    <p>Su postulación fue rechazada, no podrá tomar viajes</p>
+                                                    @break
+                                                @case(1)
+                                                    <p>Su postulación fue aprobada, pronto le informaremos la fecha para tomar viajes.</p>
+                                                    @break
+                                                @default
+                                                    
+                                            @endswitch
+
                                             @if (@isset($viaje))
                                                 <p>Viaje seleccionado con fecha {{$viaje->inicio_viaje}} y destino {{$viaje->destino_viaje}}</p>
                                                 <a href="{{route('viaje.show', ['viaje'=> $viaje->id])}}">Cargar pasajeros</a>
+                                                <p>Pasajeros: {{$numero_pasajeros}}/{{$postulacion->cupos}}</p>
                                             @endif
                                         </div>
+                                        <div class="col-12 col-sm-6">
+                                            @if($postulacion->estado_postulacion_id == 2)
+                                                <form action="{{route('postulacion.destroy', ['postulacion'=>$postulacion->id])}}" method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <a href="">
+                                                        <button type="submit" class="btn-block-option" >
+                                                            <i class="fa fa-trash"></i> Eliminar postulación 
+                                                        </button>
+                                                    </a>
+                                                </form>
+                                            @endif
+                                        </div>
+                                        <div class="col-12 col-sm-6">
+                                            <button type="button" class="btn-block-option" >
+                                                <a href="{{route('descarga_postulacion',['id'=>$postulacion->id])}}">Descargar<i class="fa fa-download"></i></a>
+                                            </button>
+                                        </div>
                                     </div>
-                                  
-                                  
-                                  <a href="{{route('show_by_customer', ['id' => $postulacion->id])}}" class="">editar</a>
                                 </div>
-                                <button type="button" class="btn-block-option" >
-                                    <a href="{{route('descarga_postulacion',['id'=>$postulacion->id])}}">Descargar<i class="fa fa-download"></i></a>
-                                </button>
                               </div>
                             </div>
                           </div>

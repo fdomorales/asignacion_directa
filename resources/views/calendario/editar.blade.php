@@ -18,14 +18,11 @@
             <div class="block block-rounded block-bordered p-5">
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Calendario {{$calendario->periodo->descripcion}}</h3>
-                    <!-- <div class="block-options">
-                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                        <i class="si si-refresh"></i>
-                                    </button>
-                                    <button type="button" class="btn-block-option">
-                                        <i class="si si-wrench"></i>
-                                    </button>
-                                </div> -->
+                    <div class="block-options">
+                        @role('Admin')
+                            <a href="" data-toggle="modal" data-target="#Modal-create-travel">Agregar viaje</a>
+                        @endrole
+                    </div>
                 </div>
                 <div class="block-content ">
                     <form action="{{route('calendario.update', ['calendario'=>$calendario->id])}}" method="POST" >
@@ -63,7 +60,7 @@
                             <div class="form-group col-sm-6">
                             </div>
                         </div>
-                        @if ($calendario->estado_calendario == 1)
+                        @if ($calendario->estado_calendario == 0)
                         <button type="submit" class="btn btn-primary mt-5">Procesar</button>
                         @endif
                     </form>
@@ -99,7 +96,7 @@
                         </tr>
                         <!-- Modal Editar -->
                         <div class="modal fade p-0" id="Modal-edit-{{$viaje->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Editar datos</h5>
@@ -142,7 +139,7 @@
 
                         <!-- Modal Delete -->
                         <div class="modal fade p-0" id="Modal-delete-{{$viaje->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Eliminar</h5>
@@ -169,7 +166,48 @@
                        
                     </tbody>
                 </table>
-                <a class="" href="{{route('descargar_calendario', ['id'=>$calendario->id])}}">bajar excel</a>
+                <a class="" href="{{route('descargar_calendario', ['id'=>$calendario->id])}}"><i class="fa fa-download"></i> bajar excel</a>
+
+                <!-- Modal create viaje -->
+                <div class="modal fade  p-0" id="Modal-create-travel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Agregar comuna</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form  action="{{route('viaje.store', ['calendario_id'=>$calendario->id])}}" method="POST">
+                            @csrf
+                            <div class="modal-body">
+                              <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Origen viaje</label>
+                                <input type="text" class="form-control" name="origen_viaje" value="">
+                              </div>
+                              <div class="form-group">
+                               <label for="recipient-name" class="col-form-label">Destino viaje</label>
+                               <input type="text" class="form-control" name="destino_viaje" value="">
+                             </div>
+                             <div class="form-group">
+                                 <label>Fecha inicio</label>
+                                 <input type="date" class="form-control bg-white " id="fecha_inicio" name="fecha_inicio"
+                                     value="" data-enable-time="true" data-time_24hr="true">
+                             </div>
+                             <div class="form-group">
+                                 <label>Fecha fin</label>
+                                 <input type="date" class="form-control bg-white " id="fecha_fin" name="fecha_fin"
+                                     value="" data-enable-time="true" data-time_24hr="true">
+                             </div>
+                              <div class="modal-footer">
+                                  <button type="submit" class="btn btn-primary">Agregar</button>
+                              </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Modal -->
             </div>
         </div>
     </div>

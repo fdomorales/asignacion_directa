@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Organizacion;
 use App\Models\Provincia;
+use App\Models\Pasajero;
 
 class Comuna extends Model
 {
@@ -17,5 +18,8 @@ class Comuna extends Model
     }
     public function provincia(){
         return $this->belongsTo(Provincia::class);
+    }
+    public function pasajero(){
+        return $this->hasMany(Pasajero::class);
     }
 }

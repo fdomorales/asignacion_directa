@@ -18,14 +18,6 @@
             <div class="block block-rounded block-bordered p-5">
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Nueva Postulación</h3>
-                    <!-- <div class="block-options">
-                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                        <i class="si si-refresh"></i>
-                                    </button>
-                                    <button type="button" class="btn-block-option">
-                                        <i class="si si-wrench"></i>
-                                    </button>
-                                </div> -->
                 </div>
                 <div class="block-content ">
                     <form action="{{route('postulacion.store')}}" method="POST" enctype="multipart/form-data">
@@ -196,7 +188,7 @@
                     @foreach ($representantes as $representante)
                         <!-- Modal Editar -->
                         <div class="modal fade p-0" id="Modal-edit-{{$representante->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Editar datos</h5>
@@ -241,7 +233,7 @@
 
                         <!-- Modal Delete -->
                         <div class="modal fade p-0" id="Modal-delete-{{$representante->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Eliminar</h5>
@@ -267,7 +259,7 @@
                     @endforeach
                     <!-- Modal create representante -->
                     <div class="modal fade p-0" id="Modal-create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Agregar representante</h5>

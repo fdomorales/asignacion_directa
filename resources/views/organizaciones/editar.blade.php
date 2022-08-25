@@ -4,7 +4,7 @@
     <div class="content">
         <nav class="breadcrumb mb-0">
             <a class="breadcrumb-item" href="/">Inicio</a>
-            @can('organizacionrd.index')
+            @can('organizaciones.index')
             <a class="breadcrumb-item" href="{{ route('organizacion.index') }}">Organizaciones</a>
                 
             @endcan
@@ -22,14 +22,6 @@
             <div class="block block-rounded block-bordered">
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Editar datos</h3>
-                    <!-- <div class="block-options">
-                            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                <i class="si si-refresh"></i>
-                            </button>
-                            <button type="button" class="btn-block-option">
-                                <i class="si si-wrench"></i>
-                            </button>
-                        </div> -->
                 </div>
                 <div class="block-content p-5">
                     <form action="{{route('organizacion.update', ['organizacion'=>$organizacion->id])}}" method="POST">

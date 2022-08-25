@@ -1,10 +1,12 @@
 @extends('inicio')
 
+@section('css')
+
 @section('breadcrumb')
     <div class="content">
         <nav class="breadcrumb mb-0">
             <a class="breadcrumb-item" href="/">Inicio</a>
-            <span class="breadcrumb-item active">Organizaciones</span>
+            <span class="breadcrumb-item active">Usuarios</span>
         </nav>
     </div>
 @endsection
@@ -16,8 +18,9 @@
         <div class="col-12">
             <div class="block block-rounded block-bordered">
                 <div class="block-header">
-                    <h3 class="block-title text-uppercase">Organizaciones</h3>
+                    <h3 class="block-title text-uppercase">Usuarios</h3>
                     <div class="block-options">
+                        
                     </div>
                 </div>
                 <div class="block-content p-5">
@@ -37,30 +40,44 @@
                             </button>
                         </div>
                     @endif
-                    <table id="tabla_organizaciones" class="table table-responsive-sm table-borderless table-hover table-striped mb-0">
+                    <table id="tabla_usuarios" class="table table-responsive-sm table-borderless table-hover table-striped mb-0">
                         <thead>
                             <tr>
-                                <th >Nombre</th>
+                                <th>#</th>
+                                <th>Nombre</th>
                                 <th>Correo</th>
-                                <th class="">Teléfono</th>
-                                <th class="">Comuna</th>
+                                <th>Permiso</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($organizaciones as $organizacion)
+                            @foreach ($users as $user)
                             
-                            <tr >  
+                            <tr >
+                                <td><span>{{$user->id}}</span></td>  
                                 <td>
-                                    <a href="{{route('organizacion.show', ['organizacion'=>$organizacion->id])}}"> <span >{{$organizacion->nombre_organizacion}}</span></a>
+                                    <span >{{$user->name}}</span>
                                 </td>
                                 <td>
-                                    <span >{{$organizacion->correo_organizacion}}</span>
+                                    <span >{{$user->email}}</span>
                                 </td>
                                 <td>
-                                    <span >{{$organizacion->telefono_organizacion}}</span>
+                                    <span >{{$user->getRoleNames()->first()}}</span>
                                 </td>
-                                <td>
-                                    <span class="text-black">{{$organizacion->comuna->nombre_comuna}}</span>
+                                <td class="text-right">
+                                    <div class="block-options">
+                                        {{-- <button type="button" class="btn-block-option" >
+                                            <a href=""><i class="fa fa-download"></i></a>
+                                        </button> --}}
+                                        <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
+                                            <a href="{{route('usuarios.edit', ['usuario'=>$user->id])}}"><i class="fa fa-eye"></i></a>
+                                        </button>
+
+                                        <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                            
+                                    </div>
                                 </td>
                             </tr>
 
@@ -75,11 +92,11 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        ¿Está seguro de desea eliminar la organización {{$organizacion->nombre_organizacion}}?
+                                        ¿Está seguro de desea eliminar ?
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                        <form action="{{route('organizacion.destroy', ['organizacion'=>$organizacion->id])}}" method="POST">
+                                        <form action="" method="POST">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit" class="btn btn-primary">Sí, eliminar</button>
@@ -88,22 +105,22 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- End Modal -->
-
+                            <!-- End Modal -->    
                             @endforeach
-                            
                             
                         </tbody>
                     </table>
                 </div>
             </div>
-            {{-- {{$organizaciones->links('pagination::bootstrap-5')}} --}}
+            {{-- {{$users->links('pagination::bootstrap-5')}} --}}
         </div>
         <!-- END Latest Orders -->
     </div>
+    <!-- END More Data -->
+
     <script>
         $(document).ready(function () {
-            $('#tabla_organizaciones').DataTable({
+            $('#tabla_usuarios').DataTable({
                 responsive: true, 
                 autoWidth: false,
                 language:{
@@ -129,5 +146,4 @@
             });
         });
     </script>
-    <!-- END More Data -->
 @endsection

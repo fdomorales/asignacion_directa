@@ -17,7 +17,7 @@ class Viaje extends Model
     ];
     
     public function calendarios(){
-        return $this->belongsTo(Calendario::class);
+        return $this->belongsTo(Calendario::class, 'calendario_id', 'id');
     }
     public function postulacion(){
         return $this->belongsTo(Postulacion::class);

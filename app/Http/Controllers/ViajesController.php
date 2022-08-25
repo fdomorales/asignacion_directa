@@ -6,12 +6,23 @@ use Illuminate\Http\Request;
 use App\Models\Viaje;
 use App\Models\Postulacion;
 use App\Models\Organizacion;
+use App\Models\Calendario;
 use App\Models\User;
 use App\Models\Pasajero;
+use App\Models\Region;
+use App\Models\Provincia;
+use App\Models\Comuna;
 use Illuminate\Support\Facades\Auth;
 
 class ViajesController extends Controller
 {
+    public function __construct()
+    {
+        //$this->middleware('can:viajes.index')->only('index');
+        //$this->middleware('can:viajes.show')->only('show');
+        $this->middleware('can:viajes.update')->only('update');
+        $this->middleware('can:viajes.destroy')->only('destroy');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,16 +30,36 @@ class ViajesController extends Controller
      */
     public function index()
     {
-        $user = Auth::id();
-        $organizacion = Organizacion::with('postulacion')->where('user_id', '=', $user)->first();
-        $postulacion = Postulacion::with(['periodo.calendario'])->where('organizacion_id', '=', $organizacion->id)->first();
-        $calendario_id = $postulacion->periodo->calendario->id;
+        if(auth()->user()->hasRole('Customer'))
+        {
+            $user_id = Auth::id();
+            $organizacion = Organizacion::with('postulacion')->where('user_id', '=', $user_id)->first();
+            $postulacion = Postulacion::with(['periodo.calendario'])->where('organizacion_id', '=', $organizacion->id)->first();
+            $postulacion_has_viaje = $postulacion->viaje->count();
+            $estado_viaje_asignado = 4;
+            if ($postulacion_has_viaje == 0 && $postulacion->estado_postulacion_id == $estado_viaje_asignado){
+                $has_viaje = true;
+            }else{
+                $has_viaje = false;
+            }
+            $calendario_id = $postulacion->periodo->calendario->id;
+            $calendario_habilitado  = Calendario::find($calendario_id)->with('viajes')->where('estado_calendario', 1)->first();
+            
+            if ($calendario_habilitado){
+                $viajes = Calendario::find($calendario_id)->with('viajes')->where('estado_calendario', 1)->first()->viajes;
+                
+            }else{
+                $viajes = [];
+            }
+            
+            return view('viajes.usuario.index', ['viajes'=>$viajes, 'postulacion'=> $postulacion, 'has_viaje'=> $has_viaje]);
+        }else{
 
-        $viajes = Viaje::with('postulacion', 'calendarios')->where('viaje_asignado', '=', 0)->where('calendario_id', '=', $calendario_id)->get();
+            $viajes = Viaje::with('postulacion.periodo', 'postulacion.organizacion', 'pasajeros', 'calendarios.periodo')->paginate(15);
 
-        //return $viajes;
+            return view('viajes.index', ['viajes'=> $viajes]);
+        }
 
-        return view('viajes.index', ['viajes'=>$viajes, 'postulacion'=> $postulacion]);
     }
 
     /**
@@ -49,7 +80,17 @@ class ViajesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $viaje = new Viaje;
+        $viaje->origen_viaje = $request->origen_viaje;
+        $viaje->destino_viaje = $request->destino_viaje;
+        $viaje->inicio_viaje = $request->fecha_inicio;
+        $viaje->fin_viaje = $request->fecha_fin;
+        $viaje->estado_viaje = 1;
+        $viaje->viaje_asignado = 0;
+        $viaje->calendario_id = $request->calendario_id;
+        $viaje->save();
+
+        return redirect()->back()->with('success', 'Viaje creado');
     }
 
     /**
@@ -60,18 +101,20 @@ class ViajesController extends Controller
      */
     public function show($id)
     {
-        $user = Auth::id();
-        $organizacion = Organizacion::with('postulacion')->where('user_id', '=', $user)->first();
-        $postulacion = Postulacion::with(['periodo.calendario'])->where('organizacion_id', '=', $organizacion->id)->first();
-        $calendario_id = $postulacion->periodo->calendario->id;
+        $regiones = Region::with('provincia.comuna')->get();
+        $provincias = Provincia::all();
+        $comunas = Comuna::all();
 
-        $viaje = Viaje::with('postulacion', 'calendarios')->find($id);
+        $viaje = Viaje::with('postulacion.periodo', 'postulacion.organizacion', 'pasajeros', 'calendarios.periodo')->find($id);
+        $organizacion = [];
+        if($viaje->postulacion){
+            $organizacion = $viaje->postulacion->organizacion;
+        }
 
-        $pasajeros = Pasajero::where('viaje_id', '=', $viaje->id)->get();
+        $pasajeros = Pasajero::with('comuna.provincia.region')->where('viaje_id', '=', $viaje->id)->get();
 
-        //return $pasajeros;
 
-        return view('viajes.detalle', ['organizacion'=>$organizacion, 'viaje'=> $viaje, 'pasajeros'=> $pasajeros]);
+        return view('viajes.usuario.detalle', ['organizacion'=>$organizacion, 'viaje'=> $viaje, 'pasajeros'=> $pasajeros, 'regiones'=> $regiones, 'provincias'=>$provincias, 'comunas'=>$comunas]);
     }
 
     /**
@@ -112,10 +155,17 @@ class ViajesController extends Controller
      */
     public function destroy($id)
     {
-        $viaje_eliminar = Viaje::find($id);
-        $viaje_eliminar->delete();
 
-        return redirect()->back()->with('success', 'Viaje Eliminado');
+        try {
+            $viaje_eliminar = Viaje::find($id);
+            $viaje_eliminar->delete();
+    
+            return redirect()->back()->with('success', 'Viaje Eliminado');
+
+        } catch (\Illuminate\Database\QueryException $e){
+            //return $e->getMessage();
+            return redirect()->back()->with('fail', 'No se puede eliminar el viaje');
+        }
     }
 
     

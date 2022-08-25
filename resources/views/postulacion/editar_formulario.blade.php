@@ -19,14 +19,6 @@
             <div class="block block-rounded block-bordered p-5">
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Actualizar Postulación</h3>
-                    <!-- <div class="block-options">
-                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                        <i class="si si-refresh"></i>
-                                    </button>
-                                    <button type="button" class="btn-block-option">
-                                        <i class="si si-wrench"></i>
-                                    </button>
-                                </div> -->
                 </div>
                 <div class="block-content ">
                     <form action="{{route('postulacion.update', ['postulacion'=>$postulacion->id])}}" method="POST">

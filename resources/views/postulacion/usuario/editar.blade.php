@@ -4,8 +4,7 @@
     <div class="content">
         <nav class="breadcrumb mb-0">
             <a class="breadcrumb-item" href="/">Inicio</a>
-            <a class="breadcrumb-item" href="{{route('postulacion.index')}}">Postulaciones</a>
-            <a class="breadcrumb-item" href="{{route('postulacion.show', ['postulacion'=>$postulacion->id])}}">Formulario</a>
+            <a class="breadcrumb-item" href="{{route('index_customer')}}">Postulaciones</a>
             <span class="breadcrumb-item active">Editar</span>
         </nav>
     </div>
@@ -19,14 +18,6 @@
             <div class="block block-rounded block-bordered p-5">
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Actualizar Postulación</h3>
-                    <!-- <div class="block-options">
-                                    <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                        <i class="si si-refresh"></i>
-                                    </button>
-                                    <button type="button" class="btn-block-option">
-                                        <i class="si si-wrench"></i>
-                                    </button>
-                                </div> -->
                 </div>
                 <div class="block-content ">
                     <form action="{{route('edit_by_customer', ['id'=>$postulacion->id])}}" method="POST">

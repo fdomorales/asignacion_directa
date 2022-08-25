@@ -5,7 +5,7 @@
         <nav class="breadcrumb mb-0">
             <a class="breadcrumb-item" href="javascript:void(0)">Inicio</a>
             <a class="breadcrumb-item" href="{{ route('periodos') }}">Periodos</a>
-            <span class="breadcrumb-item active">Formulario</span>
+            <span class="breadcrumb-item active">Nuevo periodo</span>
         </nav>
     </div>
 @endsection
@@ -17,15 +17,6 @@
         <div class="col-lg-10">
             <div class="block block-rounded block-bordered">
                 <div class="block-header">
-                    <h3 class="block-title text-uppercase">Nuevo Periodo</h3>
-                    <!-- <div class="block-options">
-                            <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                <i class="si si-refresh"></i>
-                            </button>
-                            <button type="button" class="btn-block-option">
-                                <i class="si si-wrench"></i>
-                            </button>
-                        </div> -->
                 </div>
                 <div class="block-content p-5">
                     <form action="{{ route('periodos') }}" method="POST">
@@ -73,15 +64,6 @@
 
                                 </select>
                             </div>
-                            {{-- <div class="form-group col-sm-6">
-                            <label>Región</label>
-                            <select class="form-select" name="region" >
-                                <option  value="" selected disabled hidden></option>
-                                    @foreach ($regiones as $region)
-                                        <option value="{{$region->id}}">{{$region->nombre_region}}</option>
-                                    @endforeach
-                            </select>
-                        </div> --}}
                             <div class="form-group col-sm-6">
                                 <label>Estado</label>
                                 <select class="form-select" name="estado_nombre">
@@ -115,17 +97,6 @@
         </div>
         <!-- END Latest Orders -->
     </div>
-    {{-- <script>
-        const select_tipo = document.getElementById("tipo_periodos");
-        const select_region = document.getElementById("select_region");
-        select_tipo.addEventListener("change", function() {
-            if (this.value === "1") {
-                select_region.style.display = "none";
-            } else {
-                select_region.style.display = "block";
-            }
-        });
-    </script> --}}
     <script type="text/javascript">
         $('#regiones').select2();
         const regiones = $("#regiones option");

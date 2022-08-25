@@ -7,14 +7,6 @@
                 <div class="block block-rounded block-bordered">
                     <div class="block-header">
                         <h3 class="block-title text-uppercase">Registro</h3>
-                        <!-- <div class="block-options">
-                                <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                                    <i class="si si-refresh"></i>
-                                </button>
-                                <button type="button" class="btn-block-option">
-                                    <i class="si si-wrench"></i>
-                                </button>
-                            </div> -->
                     </div>
                     <!-- Session Status -->
                     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -85,25 +77,37 @@
         </div>
 
         <script>
+
+            var listaregion = "";
+
             $(document).ready(function () 
             {
                 var regiones =  {!! json_encode($regiones->toArray()) !!};
 
                 $('#region').change(function () {
+                    listaregion1 ="<option value='' selected disabled hidden></option>";
                     var valorRegion = $(this).val();
-                    regiones.map(region => {
+
+                    var x = regiones.map(region => {
+
                         if (region.id == valorRegion) {
-                            region.provincia.map( provincia => {
+                            var x = region.provincia.map( provincia => {
                                 const opcion_vacia = '<option value="" selected disabled hidden></option>'
                                 const comunas_region = provincia.comuna.map(comuna =>{
                                      return '<option value="' + comuna.id + '">' + comuna.nombre_comuna + '</option>';
                                 });
-                                const opciones = opcion_vacia + comunas_region
-                                $('#comuna').html(opciones);
-                            })
+                                listaregion = listaregion + comunas_region.join('');
+                                return comunas_region.join('');
+                            });
+
+                            return x.join('');
                         }
-                        
                     });
+
+                    console.log(x);    
+
+                    $('#comuna').html(listaregion1 + x);
+                    //$('#comuna').html(x);
                     $('#comuna').removeAttr("disabled");
                 });
 

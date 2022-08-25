@@ -13,17 +13,11 @@
     <!-- More Data -->
     <div class="row justify-content-center">
         <!-- Latest Orders -->
-        <div class="col-lg-10">
+        <div class="col-12">
             <div class="block block-rounded block-bordered">
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Postulaciones</h3>
                     <div class="block-options">
-                        <!-- <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
-                            <i class="fa fa-edit"></i>
-                        </button>
-                        <button type="button" class="btn-block-option">
-                            <i class="fa fa-trash"></i>
-                        </button> -->
                         @role('Customer')
                         <a href="{{ route('postulacion.create')}}">
                         <button class="btn btn-primary">Nuevo</button></a>
@@ -47,7 +41,7 @@
                             </button>
                         </div>
                     @endif
-                    <table class="table table-borderless table-hover table-striped mb-0">
+                    <table id="tabla_postulaciones" class="table table-responsive-sm table-borderless table-hover table-striped mb-0">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -55,6 +49,7 @@
                                 <th>Periodo</th>
                                 <th class="d-none d-sm-table-cell">Cupos</th>
                                 <th class="text-right">Estado</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,9 +77,11 @@
                                         <button type="button" class="btn-block-option" >
                                             <a href="{{route('descarga_postulacion',['id'=>$postulacion->id])}}"><i class="fa fa-download"></i></a>
                                         </button>
+                                        @role('Admin')
                                         <button type="button" class="btn-block-option" data-toggle="block-option" data-action="state_toggle" data-action-mode="demo">
                                             <a href="{{route('postulacion.show',['postulacion'=>$postulacion->id])}}"><i class="fa fa-eye"></i></a>
                                         </button>
+                                        @endrole
                                         @can('postulaciones.destroy')
                                         <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-{{$postulacion->id}}">
                                             <i class="fa fa-trash"></i>
@@ -97,7 +94,7 @@
 
                             <!-- Modal Delete -->
                             <div class="modal fade p-0" id="Modal-{{$postulacion->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="exampleModalLabel">Alerta</h5>
@@ -126,9 +123,37 @@
                     </table>
                 </div>
             </div>
-            {{$postulaciones->links('pagination::bootstrap-5')}}
+            {{-- {{$postulaciones->links('pagination::bootstrap-5')}} --}}
         </div>
         <!-- END Latest Orders -->
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#tabla_postulaciones').DataTable({
+                responsive: true, 
+                autoWidth: false,
+                language:{
+                    "decimal":        "",
+                    "emptyTable":     "Sin datos",
+                    "info":           "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty":      "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+                    "infoPostFix":    "",
+                    "thousands":      ",",
+                    "lengthMenu":     "Mostrar _MENU_ registros",
+                    "loadingRecords": "Loading...",
+                    "processing":     "",
+                    "search":         "Buscar:",
+                    "zeroRecords":    "No se encontraron registros para la búsqueda",
+                    "paginate": {
+                        "first":      "Primero",
+                        "last":       "Último",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    }
+                }
+            });
+        });
+    </script>
     <!-- END More Data -->
 @endsection

@@ -13,6 +13,13 @@ use Excel;
 
 class CalendarioController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:calendarios.index')->only('index');
+        $this->middleware('can:calendarios.create')->only('create');
+        $this->middleware('can:calendarios.show')->only('show');
+        $this->middleware('can:calendarios.update')->only('update');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +27,7 @@ class CalendarioController extends Controller
      */
     public function index()
     {
-        $calendarios = Calendario::with(['periodo'])->paginate(5);
+        $calendarios = Calendario::with(['periodo'])->paginate(15);
         return view('calendario.index', ['calendarios'=> $calendarios]);
     }
 
@@ -32,7 +39,7 @@ class CalendarioController extends Controller
     public function create()
     {
         $estado_periodo_habilitado = 1;
-        $periodos = Periodo::all()->where('estado_periodos_id', $estado_periodo_habilitado);
+        $periodos = Periodo::with('calendario')->doesntHave('calendario')->where('estado_periodos_id', $estado_periodo_habilitado)->get();
 
         return view('calendario.crear', ['periodos'=> $periodos]);
     }
@@ -57,9 +64,7 @@ class CalendarioController extends Controller
     public function show($id)
     {
         $calendario = Calendario::with(['periodo'])->find($id);
-        //$viajes_calendario = Calendario::with(['viajes'])->find($id)->first()->viajes;
         $viajes_calendario = Viaje::where('calendario_id','=',$id)->get();
-        //return $viajes_calendario;
         
         return view('calendario.editar', ['calendario'=> $calendario, 'viajes_calendario'=> $viajes_calendario]);
     }
@@ -84,7 +89,7 @@ class CalendarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $estado_procesado = 2;
+        $estado_procesado = 1;
         $calendario = Calendario::find($id);
         $calendario->estado_calendario = $estado_procesado;
         $calendario->save();
@@ -105,7 +110,7 @@ class CalendarioController extends Controller
     public function insertTravels(Request $request)
     {
         $nuevo_calendario = new Calendario;
-        $nuevo_calendario->estado_calendario = '1';
+        $nuevo_calendario->estado_calendario = 0;
         $nuevo_calendario->periodo_id = $request->periodo;
         $nuevo_calendario->save();
 
