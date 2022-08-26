@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('destino_viaje');
             $table->date('inicio_viaje');
             $table->date('fin_viaje');
+            $table->string('periodo_viaje');
+            $table->string('cupo_baja_viaje');
+            $table->string('temporada_viaje');
+            $table->string('copago_viaje');
             $table->string('estado_viaje');
             $table->boolean('viaje_asignado');
             $table->bigInteger('calendario_id')->unsigned();

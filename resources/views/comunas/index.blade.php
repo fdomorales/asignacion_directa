@@ -38,6 +38,7 @@
                     <table id="tabla_comunas" class="table table-responsive-sm table-borderless table-hover table-striped mb-0">
                         <thead>
                             <tr>
+                                <th>#</th>
                                 <th>Código</th>
                                 <th>Nombre</th>
                                 <th>Alias</th>
@@ -51,6 +52,7 @@
                         <tbody>
                             @foreach ($comunas as $comuna)
                             <tr >
+                                <td><span>{{$comuna->id}}</span></td>  
                                 <td><span>{{$comuna->codigo_comuna}}</span></td>  
                                 <td>
                                     <span >{{$comuna->nombre_comuna}}</span>

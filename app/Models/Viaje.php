@@ -13,7 +13,7 @@ class Viaje extends Model
     use HasFactory;
     
     protected $fillable = [
-        'origen_viaje', 'destino_viaje', 'inicio_viaje', 'fin_viaje', 'estado_viaje', 'viaje_asignado', 'calendario_id', 'postulacion_id'
+        'origen_viaje', 'destino_viaje', 'inicio_viaje', 'fin_viaje', 'periodo_viaje', 'cupo_baja_viaje', 'temporada_viaje', 'copago_viaje','estado_viaje', 'viaje_asignado', 'calendario_id', 'postulacion_id'
     ];
     
     public function calendarios(){

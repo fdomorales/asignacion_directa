@@ -14,7 +14,7 @@
     <!-- More Data -->
     <div class="row justify-content-center">
         <!-- Latest Orders -->
-        <div class="col-12 col-lg-10">
+        <div class="col-12 ">
             <div class="block block-rounded block-bordered p-5">
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Calendario {{$calendario->periodo->descripcion}}</h3>
@@ -24,7 +24,7 @@
                         @endrole
                     </div>
                 </div>
-                <div class="block-content ">
+                <div class="block-content mb-15">
                     <form action="{{route('calendario.update', ['calendario'=>$calendario->id])}}" method="POST" >
                         @method('PATCH')
                         @csrf
@@ -61,18 +61,23 @@
                             </div>
                         </div>
                         @if ($calendario->estado_calendario == 0)
-                        <button type="submit" class="btn btn-primary mt-5">Procesar</button>
+                        <button type="submit" class="btn btn-primary my-25">Procesar</button>
                         @endif
                     </form>
                 </div>
-                <table class="table table-borderless table-hover table-striped mb-0 mt-10">
+                <table id="tabla_viajes" class="table table-borderless table-hover table-striped mb-0 mt-10">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Origen</th>
                             <th>Destino</th>
-                            <th class="d-none d-sm-table-cell">Fecha de inicio</th>
-                            <th class="d-none d-sm-table-cell">Fecha de término</th>
+                            <th>Fecha de inicio</th>
+                            <th>Fecha de término</th>
+                            <th>Periodo</th>
+                            <th>Cupo</th>
+                            <th>Temporada</th>
+                            <th>Copago</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,6 +88,10 @@
                             <td>{{$viaje->destino_viaje}}</td>
                             <td>{{$viaje->inicio_viaje}}</td>
                             <td>{{$viaje->fin_viaje}}</td>
+                            <td>{{$viaje->periodo_viaje}}</td>
+                            <td>{{$viaje->cupo_baja_viaje}}</td>
+                            <td>{{$viaje->temporada_viaje}}</td>
+                            <td>{{$viaje->copago_viaje}}</td>
                             <td class="text-right">
                                 <div class="block-options">
                                     <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-edit-{{$viaje->id}}">
@@ -126,6 +135,22 @@
                                         <label for="recipient-name" class="col-form-label">Fecha Término</label>
                                         <input type="date" class="form-control bg-white " id="fecha_fin" 
                                         name="fecha_fin" data-enable-time="true" data-time_24hr="true" value="{{$viaje->fin_viaje}}">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Periodo</label>
+                                        <input type="text" class="form-control" name="periodo_viaje" value="{{$viaje->periodo_viaje}}">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Cupo baja</label>
+                                        <input type="text" class="form-control" name="cupo_viaje" value="{{$viaje->cupo_baja_viaje}}">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Temporada</label>
+                                        <input type="text" class="form-control" name="temporada_viaje" value="{{$viaje->temporada_viaje}}">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Copago</label>
+                                        <input type="text" class="form-control" name="copago_viaje" value="{{$viaje->copago_viaje}}">
                                       </div>
                                       <div class="modal-footer">
                                           <button type="submit" class="btn btn-primary">Guardar cambios</button>
@@ -199,6 +224,22 @@
                                  <input type="date" class="form-control bg-white " id="fecha_fin" name="fecha_fin"
                                      value="" data-enable-time="true" data-time_24hr="true">
                              </div>
+                             <div class="form-group">
+                               <label for="recipient-name" class="col-form-label">Periodo</label>
+                               <input type="text" class="form-control" name="periodo_viaje" value="">
+                             </div>
+                             <div class="form-group">
+                               <label for="recipient-name" class="col-form-label">Cupo baja</label>
+                               <input type="text" class="form-control" name="cupo_viaje" value="">
+                             </div>
+                             <div class="form-group">
+                               <label for="recipient-name" class="col-form-label">Temporada</label>
+                               <input type="text" class="form-control" name="temporada_viaje" value="">
+                             </div>
+                             <div class="form-group">
+                               <label for="recipient-name" class="col-form-label">Copago</label>
+                               <input type="text" class="form-control" name="copago_viaje" value="">
+                             </div>
                               <div class="modal-footer">
                                   <button type="submit" class="btn btn-primary">Agregar</button>
                               </div>
@@ -213,4 +254,32 @@
     </div>
     <!-- END Latest Orders -->
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#tabla_viajes').DataTable({
+                responsive: true, 
+                autoWidth: false,
+                language:{
+                    "decimal":        "",
+                    "emptyTable":     "Sin datos",
+                    "info":           "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty":      "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+                    "infoPostFix":    "",
+                    "thousands":      ",",
+                    "lengthMenu":     "Mostrar _MENU_ registros",
+                    "loadingRecords": "Loading...",
+                    "processing":     "",
+                    "search":         "Buscar:",
+                    "zeroRecords":    "No se encontraron registros para la búsqueda",
+                    "paginate": {
+                        "first":      "Primero",
+                        "last":       "Último",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

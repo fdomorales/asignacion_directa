@@ -85,6 +85,10 @@ class ViajesController extends Controller
         $viaje->destino_viaje = $request->destino_viaje;
         $viaje->inicio_viaje = $request->fecha_inicio;
         $viaje->fin_viaje = $request->fecha_fin;
+        $viaje->periodo_viaje = $request->periodo_viaje;
+        $viaje->cupo_baja_viaje = $request->cupo_viaje;
+        $viaje->temporada_viaje = $request->temporada_viaje;
+        $viaje->copago_viaje = $request->copago_viaje;
         $viaje->estado_viaje = 1;
         $viaje->viaje_asignado = 0;
         $viaje->calendario_id = $request->calendario_id;
@@ -142,6 +146,10 @@ class ViajesController extends Controller
         $viaje->destino_viaje = $request->destino;
         $viaje->inicio_viaje = $request->fecha_inicio;
         $viaje->fin_viaje = $request->fecha_fin;
+        $viaje->periodo_viaje = $request->periodo_viaje;
+        $viaje->cupo_baja_viaje = $request->cupo_viaje;
+        $viaje->temporada_viaje = $request->temporada_viaje;
+        $viaje->copago_viaje = $request->copago_viaje;
         $viaje->save();
 
         return redirect()->back()->with('success', 'Viaje actualizado');
