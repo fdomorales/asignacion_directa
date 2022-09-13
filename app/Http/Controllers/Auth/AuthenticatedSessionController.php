@@ -8,8 +8,10 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Region;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Jumbojett\OpenIDConnectClient;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -27,7 +29,7 @@ class AuthenticatedSessionController extends Controller
          ->where('periodos.fecha_fin', '>',Carbon::now())
          ->where('periodos.estado_periodos_id', '=', 1)
          ->distinct()
-        ->get(['nombre_region']); 
+        ->get(['nombre_region']);
         //return $regiones;
         //return view('auth.login');
         return view('login.index', ['regiones'=> $regiones]);
@@ -41,9 +43,46 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        $request->authenticate();
+        $request -> validate([
+            'email' => ['required', 'email'],
+            'password' => ['required']
+        ]);
 
-        $request->session()->regenerate();
+        list($usuario, $dominio) = explode('@', $request->email);
+
+        $user = User::whereNotNull('email_verified_at')
+			->where('email',$request->email)
+			->first();
+
+        if(is_null($user)) {
+            return redirect('/login');
+        }
+
+        if($dominio == 'sernatur.cl') {
+            $oidc = new OpenIDConnectClient('https://sso.sernatur.cl/auth/realms/asignacion-directa', 'asignacion-directa', 'fddfa932-bc95-4c81-8815-5a94b4fc722d');
+			$oidc->providerConfigParam(array('token_endpoint' => 'https://sso.sernatur.cl/auth/realms/asignacion-directa/protocol/openid-connect/token'));
+            $oidc->addScope('openid');
+
+            //Add username and password
+            $oidc->addAuthParam(array('username' => $request->email));
+            $oidc->addAuthParam(array('password' => $request->password));
+
+            //Perform the auth and return the token (to validate check if the access_token property is there and a valid JWT) :
+            $token = json_decode(json_encode($oidc->requestResourceOwnerToken(TRUE)), TRUE);
+
+            if ( array_key_exists('access_token', $token)) {
+				Auth::login($user);
+                $request->session()->regenerate();
+            } else {
+                return back()
+                    ->withErrors(['email' => 'Estas credenciales no coinciden con nuestros registros.'])
+                    ->onlyInput('email');
+            }
+
+        } else {
+            $request->authenticate();
+            $request->session()->regenerate();
+        }
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

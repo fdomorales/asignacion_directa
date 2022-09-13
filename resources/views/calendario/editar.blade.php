@@ -86,8 +86,8 @@
                             <td>{{$viaje->id}}</td>
                             <td>{{$viaje->origen_viaje}}</td>
                             <td>{{$viaje->destino_viaje}}</td>
-                            <td>{{$viaje->inicio_viaje}}</td>
-                            <td>{{$viaje->fin_viaje}}</td>
+                            <td>{{convert_date($viaje->inicio_viaje)}}</td>
+                            <td>{{convert_date($viaje->fin_viaje)}}</td>
                             <td>{{$viaje->periodo_viaje}}</td>
                             <td>{{$viaje->cupo_baja_viaje}}</td>
                             <td>{{$viaje->temporada_viaje}}</td>

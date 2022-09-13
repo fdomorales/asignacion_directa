@@ -31,6 +31,11 @@ class PostulacionEnviada extends Mailable
      */
     public function build()
     {
-        return $this->view('postulacion.email')->with(['idpostulacion'=> $this->correo]);
+        return $this->markdown('postulacion.mails.email')
+            ->with('idpostulacion', $this->correo)
+            ->from('asignaciondirecta@sernatur.cl','Asignacion Directa')
+            ->subject('Postulación Enviada');
+
+        //return $this->view('postulacion.mails.email')->with(['idpostulacion'=> $this->correo]);
     }
 }

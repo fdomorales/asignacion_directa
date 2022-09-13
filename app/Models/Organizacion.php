@@ -8,11 +8,13 @@ use App\Models\Postulacion;
 use App\Models\Comuna;
 use App\Models\Representante;
 use App\Models\User;
+use OwenIt\Auditing\Contracts\Auditable;
 
-
-class Organizacion extends Model
+class Organizacion extends Model implements Auditable
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
+
     protected $table = 'organizaciones';
 
     public function postulacion(){

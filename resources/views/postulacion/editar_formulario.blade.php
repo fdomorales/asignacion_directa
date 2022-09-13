@@ -1,4 +1,4 @@
-@extends('inicio')
+@extends('layouts.app')
 
 @section('breadcrumb')
     <div class="content">
@@ -79,7 +79,7 @@
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="form-group ">
                                 <label>Estado</label>

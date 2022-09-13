@@ -28,6 +28,10 @@ class PostulacionRechazada extends Mailable
      */
     public function build()
     {
-        return $this->view('postulacion.emailRechaza');
+        return $this->markdown('postulacion.mails.emailRechaza')
+            ->from('asignaciondirecta@sernatur.cl','Asignacion Directa')
+            ->subject('Postulación Rechazada');
+
+        // return $this->view('postulacion.mails.emailRechaza');
     }
 }

@@ -1,4 +1,4 @@
-@extends('inicio')
+@extends('layouts.app')
 
 @section('breadcrumb')
     <div class="content">
@@ -41,7 +41,7 @@
                             </button>
                         </div>
                     @endif
-                    <table id="" class="table table-responsive-sm table-borderless table-hover table-striped mb-0">
+                    <table id="tabla_periodos" class="table table-responsive-sm table-borderless table-hover table-striped mb-0">
                         <thead>
                             <tr>
                                 <th >Descripción</th>
@@ -50,7 +50,9 @@
                                 <th class="">Tipo Periodo</th>
                                 <th class=" col-sm-4">Regiones</th>
                                 <th class="">Estado</th>
-                                <th class=""></th>
+                                @role('Admin')
+                                    <th></th>
+                                @endrole
                             </tr>
                         </thead>
                         <tbody>
@@ -65,17 +67,18 @@
                                     @endrole
                                 </td>
                                 <td>
-                                    <span >{{$periodo->fecha_inicio}}</span>
+                                    <span >{{convert_date($periodo->fecha_inicio)}} a las {{convert_time($periodo->fecha_inicio)}}</span>
+                                    {{-- <span >{{date('d-m-Y', strtotime($periodo->fecha_inicio))}}</span> --}}
                                 </td>
                                 <td>
-                                    <span >{{$periodo->fecha_fin}}</span>
+                                    <span >{{convert_date($periodo->fecha_fin)}} a las {{convert_time($periodo->fecha_fin)}}</span>
                                 </td>
                                 <td>
                                     <span class="text-black">{{$periodo->tipo_periodos->nombre_tipo_periodo}}</span>
                                 </td>
                                 <td>[ @foreach ($periodo->region as $reg)
                                      {{$reg->nombre_region}}{{$loop->last ? '.' : ', '}}
-                                @endforeach ]
+                                    @endforeach ]
                                 </td>
                                 @switch($periodo->estado_periodos->id)
                                     @case("1")
@@ -136,15 +139,39 @@
                     </table>
                 </div>
             </div>
-            {{$periodos->links('pagination::bootstrap-5')}}
+            {{-- {{$periodos->links('pagination::bootstrap-5')}} --}}
         </div>
         <!-- END Latest Orders -->
     </div>
     <!-- END More Data -->
 
+        
     <script>
         $(document).ready(function () {
-            $('#tabla_periodos').DataTable();
+            $('#tabla_periodos').DataTable({
+                responsive: true,
+                autoWidth: false,
+                language:{
+                    "decimal":        "",
+                    "emptyTable":     "Sin datos",
+                    "info":           "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty":      "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+                    "infoPostFix":    "",
+                    "thousands":      ",",
+                    "lengthMenu":     "Mostrar _MENU_ registros",
+                    "loadingRecords": "Loading...",
+                    "processing":     "",
+                    "search":         "Buscar:",
+                    "zeroRecords":    "No se encontraron registros para la búsqueda",
+                    "paginate": {
+                        "first":      "Primero",
+                        "last":       "Último",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    }
+                }
+            });
         });
     </script>
 @endsection

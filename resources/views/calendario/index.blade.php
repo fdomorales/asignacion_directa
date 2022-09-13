@@ -33,13 +33,16 @@
                             </button>
                         </div>
                     @endif
-                    <table class="table table-responsive-sm table-borderless table-hover table-striped mb-0">
+                    <table id="tabla_calendarios" class="table table-responsive-sm table-borderless table-hover table-striped mb-0">
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Periodo calendario</th>
                                 <th>Fecha creación</th>
                                 <th class="">Estado</th>
+                                @role('Admin')
+                                    <th></th>
+                                @endrole
                             </tr>
                         </thead>
                         <tbody>
@@ -53,7 +56,7 @@
                                     <a href=""> <span >{{$calendario->periodo->descripcion}}</span></a>
                                 </td>
                                 <td>
-                                    <span >{{$calendario->created_at}}</span>
+                                    <span >{{convert_date($calendario->created_at)}} a las {{convert_time($calendario->created_at)}}</span>
                                 </td>
                                 <td>
                                     @if ($calendario->estado_calendario == 0)
@@ -76,9 +79,39 @@
                     </table>
                 </div>
             </div>
-            {{$calendarios->links('pagination::bootstrap-5')}}
+            {{-- {{$calendarios->links('pagination::bootstrap-5')}} --}}
         </div>
         <!-- END Latest Orders -->
     </div>
     <!-- END More Data -->
+
+    
+    <script>
+        $(document).ready(function () {
+            $('#tabla_calendarios').DataTable({
+                responsive: true,
+                autoWidth: false,
+                language:{
+                    "decimal":        "",
+                    "emptyTable":     "Sin datos",
+                    "info":           "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    "infoEmpty":      "Mostrando 0 a 0 de 0 registros",
+                    "infoFiltered":   "(Filtrado de _MAX_ registros totales)",
+                    "infoPostFix":    "",
+                    "thousands":      ",",
+                    "lengthMenu":     "Mostrar _MENU_ registros",
+                    "loadingRecords": "Loading...",
+                    "processing":     "",
+                    "search":         "Buscar:",
+                    "zeroRecords":    "No se encontraron registros para la búsqueda",
+                    "paginate": {
+                        "first":      "Primero",
+                        "last":       "Último",
+                        "next":       "Siguiente",
+                        "previous":   "Anterior"
+                    }
+                }
+            });
+        });
+    </script>
 @endsection

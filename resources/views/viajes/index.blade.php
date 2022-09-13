@@ -18,7 +18,12 @@
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Viajes</h3>
                     <div class="block-options">
-                        
+                        <a href="{{ route('descargar_pasajeros')}}">
+                            Descargar listado pasajeros <i class="fa fa-download"></i>
+                        </a><br>
+                        <a href="{{ route('descargar_viajes')}}">
+                            Descargar listado viajes <i class="fa fa-download"></i>
+                        </a>
                     </div>
                 </div>
                 <div class="block-content p-5">
@@ -53,26 +58,20 @@
                         <tbody>
                             @foreach ($viajes as $viaje)
                             
-                            <tr >
+                            <tr>
                                 <td><span>{{$viaje->id}}</span></td>  
+                                <td><span>{{$viaje->origen_viaje}}</span></td>
+                                <td><span>{{$viaje->destino_viaje}}</span></td>
+                                <td><span>{{$viaje->calendarios->periodo->descripcion}}</span></td>
                                 <td>
-                                    <span >{{$viaje->origen_viaje}}</span>
-                                </td>
-                                <td>
-                                    <span >{{$viaje->destino_viaje}}</span>
-                                </td>
-                                <td>
-                                    <span >{{$viaje->calendarios->periodo->descripcion}}</span>
-                                </td>
-                                <td >
-                                    @if ($viaje->postulacion)
+                                    @if ($viaje->postulacion->organizacion)
                                         {{$viaje->postulacion->organizacion->nombre_organizacion}}
                                     @else
                                         no asignado
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($viaje->postulacion)
+                                    @if ($viaje->postulacion->organizacion)
                                         {{$viaje->pasajeros->count()}} / {{$viaje->postulacion->cupos}}
                                     @else
                                         -
@@ -90,8 +89,7 @@
 
                                             <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-{{$viaje->id}}">
                                                 <i class="fa fa-trash"></i>
-                                            </button>
-                                                
+                                            </button>    
                                         </div>
                                     </td>
                                 @endrole

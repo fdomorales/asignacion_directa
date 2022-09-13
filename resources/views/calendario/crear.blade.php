@@ -44,7 +44,7 @@
                                 <select class="form-select" name="periodo" id="periodo">
                                     <option value="" selected disabled hidden></option>
                                     @foreach ($periodos as $periodo)
-                                        <option value="{{ $periodo->id }}">{{ $periodo->descripcion }} - {{$periodo->fecha_inicio}}</option>
+                                        <option value="{{ $periodo->id }}">{{ $periodo->descripcion }} - {{convert_date($periodo->fecha_inicio)}}</option>
                                     @endforeach
 
                                 </select>

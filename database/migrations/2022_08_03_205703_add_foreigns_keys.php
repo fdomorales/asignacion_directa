@@ -14,63 +14,68 @@ return new class extends Migration
     public function up()
     {
         Schema::table('periodos', function (Blueprint $table) {
-            
+
             $table->bigInteger('tipo_periodos_id')->unsigned();
             $table->foreign('tipo_periodos_id')->references('id')->on('tipo_periodos');
-        
+
         });
 
-        Schema::table('comunas', function (Blueprint $table) {            
+        Schema::table('comunas', function (Blueprint $table) {
 
             $table->bigInteger('provincia_id')->unsigned();
-            $table->foreign('provincia_id')->references('id')->on('provincias');  
+            $table->foreign('provincia_id')->references('id')->on('provincias');
 
         });
-        
-        Schema::table('provincias', function (Blueprint $table) {            
+
+        Schema::table('provincias', function (Blueprint $table) {
 
             $table->bigInteger('region_id')->unsigned();
-            $table->foreign('region_id')->references('id')->on('regiones');  
-                  
+            $table->foreign('region_id')->references('id')->on('regiones');
+
         });
 
-        Schema::table('postulaciones', function (Blueprint $table) {            
+        Schema::table('postulaciones', function (Blueprint $table) {
 
-            $table->foreign('estado_postulacion_id')->references('id')->on('estado_postulaciones');  
-            $table->foreign('comuna_id')->references('id')->on('comunas');  
-            $table->foreign('periodo_id')->references('id')->on('periodos');  
-            $table->foreign('organizacion_id')->references('id')->on('organizaciones');  
+            $table->foreign('estado_postulacion_id')->references('id')->on('estado_postulaciones');
+            $table->foreign('comuna_id')->references('id')->on('comunas');
+            $table->foreign('periodo_id')->references('id')->on('periodos');
+            $table->foreign('organizacion_id')->references('id')->on('organizaciones');
 
-                  
+
         });
         Schema::table('periodo_region', function (Blueprint $table) {
-            
+
             $table->foreign('periodo_id')->references('id')->on('periodos')->onDelete('cascade');
             $table->foreign('region_id')->references('id')->on('regiones');
-                  
+
         });
         Schema::table('organizaciones', function (Blueprint $table) {
-            
+
             $table->foreign('comuna_id')->references('id')->on('comunas')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
-                  
+
         });
         Schema::table('calendarios', function (Blueprint $table) {
-            
+
             $table->foreign('periodo_id')->references('id')->on('periodos');
-                  
+
+        });
+        Schema::table('representantes', function (Blueprint $table) {
+
+            $table->foreign('organizacion_id')->references('id')->on('organizaciones');
+
         });
         Schema::table('viajes', function (Blueprint $table) {
-            
+
             $table->foreign('calendario_id')->references('id')->on('calendarios');
             $table->foreign('postulacion_id')->references('id')->on('postulaciones');
-                  
+
         });
         Schema::table('pasajeros', function (Blueprint $table) {
-            
+
             $table->foreign('comuna_id')->references('id')->on('comunas');
             $table->foreign('viaje_id')->references('id')->on('viajes');
-                  
+
         });
         //datos de prueba
         $data_regiones = [

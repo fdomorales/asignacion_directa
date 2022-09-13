@@ -1,4 +1,4 @@
-@extends('inicio')
+@extends('layouts.app')
 
 @section('breadcrumb')
     <div class="content">
@@ -42,12 +42,12 @@
                     <div class="row">
                         <div class="form-group col-sm-6">
                             <label>Fecha inicio</label>
-                            <input type="date" class="form-control bg-white " id="fecha_inicio" 
+                            <input type="datetime-local" class="form-control bg-white " id="fecha_inicio" 
                             name="fecha_inicio" data-enable-time="true" data-time_24hr="true" value="{{$periodo->fecha_inicio}}">
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Fecha fin</label>
-                            <input type="date" class="form-control bg-white " id="fecha_fin" 
+                            <input type="datetime-local" class="form-control bg-white " id="fecha_fin" 
                             name="fecha_fin" data-enable-time="true" data-time_24hr="true" value="{{$periodo->fecha_fin}}">
                         </div>
                     </div>

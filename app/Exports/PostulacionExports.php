@@ -10,9 +10,9 @@ class PostulacionExports implements FromCollection, WithHeadings
 {
     protected $postulacion_id;
 
-    public function __construct($postulacion_id){
+    /* public function __construct($postulacion_id){
         $this->postulacion_id = $postulacion_id;
-    }
+    } */
     /**
     * @return \Illuminate\Support\Collection
     */
@@ -27,7 +27,7 @@ class PostulacionExports implements FromCollection, WithHeadings
             'postulaciones.cupos', 
             'comunas.nombre_comuna',
             'postulaciones.created_at')
-        ->where('postulaciones.id', '=', $this->postulacion_id)->get();
+        ->get();
         return $postulacion;
     }
 

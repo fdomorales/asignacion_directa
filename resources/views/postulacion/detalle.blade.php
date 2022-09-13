@@ -1,4 +1,4 @@
-@extends('inicio')
+@extends('layouts.app')
 
 @section('breadcrumb')
     <div class="content">
@@ -92,20 +92,19 @@
                             target="_blank">{{ $postulacion->nombre_documento }}</a>
                     </div>
                 </div>
-                @if ($postulacion->estado_postulacion->id == 1)
-                <div class="block-header">
-                    <div class="block-options">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalConfirm">Asignar viajes</button>
+                @if ($postulacion->estado_postulacion_id == 1 && $postulacion->periodo->calendario->estado_calendario == 1)
+                    <div class="block-header">
+                        <div class="block-options">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalConfirm">Asignar viajes</button>
+                        </div>
                     </div>
-                </div>
-                @else
-                <div class="block-header">
-                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDecline">Rechazar postulación</button>
-                    <div class="block-options">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAcept">Aceptar postulación</button>
+                @elseif ($postulacion->estado_postulacion->id == 2)
+                    <div class="block-header">
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#ModalDecline">Rechazar postulación</button>
+                        <div class="block-options">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ModalAcept">Aceptar postulación</button>
+                        </div>
                     </div>
-                </div>
-                    
                 @endif
 
                 <!-- Modal Aceptar -->

@@ -1,4 +1,4 @@
-@extends('inicio')
+@extends('layouts.app')
 
 @section('breadcrumb')
     <div class="content">
@@ -96,7 +96,7 @@
                             {{-- table representantes --}}
                             <tbody>
                                 @foreach ($representantes as $representante)
-                                <tr >  
+                                <tr >
                                     <td>
                                         <span >{{$representante->nombre_representante}}</span>
                                     </td>
@@ -124,7 +124,7 @@
                                     </td>
                                 </tr>
                                 @endforeach
-    
+
                             </tbody>
                         </table>
                         <hr>
@@ -181,7 +181,7 @@
                         @else
                         <h5 class="alert alert-warning">En este momento no hay periodos disponibles para su región</h5>
                         @endif
-                        
+
                     </form>
 
                     {{-- inicio modales --}}

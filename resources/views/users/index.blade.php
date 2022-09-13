@@ -20,7 +20,10 @@
                 <div class="block-header">
                     <h3 class="block-title text-uppercase">Usuarios</h3>
                     <div class="block-options">
-                        
+                        @role('Admin')
+                            <a href="{{route('usuarios.create')}}">
+                            <button class="btn btn-primary">Nuevo</button></a>
+                        @endrole
                     </div>
                 </div>
                 <div class="block-content p-5">
@@ -74,6 +77,7 @@
                                         </button>
 
                                         <button type="button" class="btn-block-option" data-toggle="modal" data-target="#Modal-">
+                                            {{-- <a href="{{route('usuarios.destroy', ['usuario'=>$user->id])}}"><i class="fa fa-trash"></i></a> --}}
                                             <i class="fa fa-trash"></i>
                                         </button>
                                             
@@ -96,7 +100,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                        <form action="" method="POST">
+                                        <form action="{{route('usuarios.destroy', ['usuario'=>$user->id])}}" method="POST">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit" class="btn btn-primary">Sí, eliminar</button>

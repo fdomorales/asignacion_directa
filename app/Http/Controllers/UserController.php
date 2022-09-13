@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -13,12 +14,10 @@ class UserController extends Controller
         $this->middleware('can:users.index')->only('index');
         $this->middleware('can:users.edit')->only('edit');
         $this->middleware('can:users.update')->only('update');
+
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function index()
     {
         //$usuarios = User::paginate(10);
@@ -27,44 +26,48 @@ class UserController extends Controller
         return view('users.index', ['users'=> $usuarios]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
-        //
+        $roles = Role::all();
+
+        return view('users.create', compact('roles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre'=>'required',
+            'email'=>'required|email|unique:users',
+            'rol'=>'required'
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $usuario = new User;
+            $usuario->name = $request->nombre;
+            $usuario->email = $request->email;
+            $usuario->password = bcrypt('123456');
+            $usuario->email_verified_at = date('Y-m-d H:i:s');
+            $usuario->save();
+
+            $usuario->assignRole($request->rol);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+			throw $e;
+        }
+
+        DB::commit();
+
+        return redirect()
+            ->route('usuarios.index')
+            ->with('success', 'Usuario creado exitosamente');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $user = User::find($id);
@@ -74,28 +77,12 @@ class UserController extends Controller
         return view('users.edit', ['user'=>$user, 'roles'=> $roles, 'role_user_id'=>$role_user_id]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         $user = User::find($id);
         $user->roles()->sync($request->role);
         return redirect()->route('usuarios.index')->with('success', 'Permiso asignado a usuario');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
 }

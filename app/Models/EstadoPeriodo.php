@@ -10,7 +10,6 @@ class EstadoPeriodo extends Model
 {
     use HasFactory;
 
-
     public function periodo(){
         return $this->hasMany(Periodo::class);
     }

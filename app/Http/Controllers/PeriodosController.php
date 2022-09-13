@@ -12,29 +12,20 @@ use Illuminate\Support\Facades\DB;
 
 class PeriodosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $periodos = Periodo::with([ 'estado_periodos', 'tipo_periodos', 'region'])->paginate(10);
+        $periodos = Periodo::with([ 'estado_periodos', 'tipo_periodos', 'region'])->get();
         /* $periodos = DB::table('periodos')
         ->join('estado_periodos','periodos.estado_periodos_id','=', 'estado_periodos.id')
         ->join('regiones', 'periodos.region_id', '=', 'regiones.id')
         ->select('periodos.*','nombre_estado', 'nombre_region')
         ->get(); */
-        
+
         //return ($periodos_r);
         return view('periodos.index', ['periodos' => $periodos]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $estado_periodo = EstadoPeriodo::all();
@@ -45,12 +36,7 @@ class PeriodosController extends Controller
         return view('periodos.formulario', ['estado_periodo'=> $estado_periodo, 'regiones'=>$regiones, 'tipo_periodo'=> $tipo_periodo]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $request -> validate([
@@ -81,12 +67,7 @@ class PeriodosController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         //$periodo_seleccionado = Periodo::find($id);
@@ -98,43 +79,16 @@ class PeriodosController extends Controller
         ->first();
         $estado_periodo = EstadoPeriodo::all();
         $regiones = Region::all();
-        $regiones_periodo = Periodo::find($id)->region()->get(); 
+        $regiones_periodo = Periodo::find($id)->region()->get();
         $tipo_periodo = TipoPeriodo::all();
 
         //return [$regiones_periodo];
         return view('periodos.editar_formulario',['periodo'=> $periodo_seleccionado, 'estado_periodo'=>$estado_periodo, 'regiones'=>$regiones, 'tipo_periodo'=> $tipo_periodo, 'regiones_periodo'=> $regiones_periodo]);
     }
 
-   /*  {
-        $periodo_seleccionado = Periodo::find($id);
-        $estado_periodo = EstadoPeriodo::all();
-        return $periodo_seleccionado;
-        //return view('periodos.editar_formulario', ['periodo'=> $periodo_seleccionado, 'estado_periodo'=> $estado_periodo]);
-    } */
 
-
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //return $request->regiones;
         $request -> validate([
             'descripcion'=>'required|min:3',
             'fecha_inicio'=>'required|date',
@@ -150,11 +104,12 @@ class PeriodosController extends Controller
         $periodo_a_editar->save();
 
         $periodos_regiones_delete = PeriodoRegion::where('periodo_id','=',$id)->get();
-            foreach ($periodos_regiones_delete as $periodo_region_delete){
-                $periodo_region_delete->delete();
-            }
-        if ($request->regiones){
-            
+
+        foreach ($periodos_regiones_delete as $periodo_region_delete){
+            $periodo_region_delete->delete();
+        }
+
+        if ($request->regiones) {
             foreach($request->regiones as $region){
                 $nuevo_periodo_region = new PeriodoRegion;
                 $nuevo_periodo_region->periodo_id = $id;
@@ -162,34 +117,22 @@ class PeriodosController extends Controller
                 $nuevo_periodo_region->save();
             }
         }
-        
 
         return redirect()->route('periodos')->with('success', 'Periodo actualizado');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
         try {
             $periodo_a_borrar = Periodo::find($id);
             $periodo_a_borrar->delete();
-    
+
             return redirect()->route('periodos')->with('success', 'Periodo borrado');
 
         } catch (\Illuminate\Database\QueryException $e){
-            //return $e->getMessage();
             return redirect()->back()->with('fail', 'No se puede eliminar el periodo seleccionado');
         }
 
     }
-
-    public function prueba(){
-        return view('prueba');
-    }
-
 }

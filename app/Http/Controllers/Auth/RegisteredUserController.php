@@ -58,7 +58,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-        ])->assignRole('Customer');
+        ])->assignRole('Cliente');
         $new_organization = new Organizacion;
         $new_organization->nombre_organizacion = $request->name;
         $new_organization->correo_organizacion = $request->email;

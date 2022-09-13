@@ -11,6 +11,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ComunaController;
 use App\Http\Controllers\PasajeroController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HomeController;
 
 
 /*
@@ -24,16 +25,17 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    return view('inicio');
-});
+//Route::get('/', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('index');
+Route::get('/', [HomeController::class, 'index'])->name('index');
+/*Route::get('/', function () {
+    return view('index');
+});*/
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__.'/auth.php';
-
 
 
 Route::get('/periodos', [PeriodosController::class, 'index'])->middleware(['auth', 'verified', 'can:periodos.index'])->name('periodos');
@@ -47,10 +49,11 @@ Route::resources(['postulacion'=> PostulacionController::class],  ['middleware' 
 Route::patch('postulacion/acepta/{id}', [PostulacionController::class, 'aceptaPostulacion'])->middleware(['auth', 'verified', 'can:postulaciones.aceptaPostulacion'])->name('aceptar_postulacion');
 Route::patch('postulacion/rechaza/{id}', [PostulacionController::class, 'rechazaPostulacion'])->middleware(['auth', 'verified', 'can:postulaciones.rechazaPostulacion'])->name('rechazar_postulacion');
 Route::patch('postulacion/asigna/{id}', [PostulacionController::class, 'asignarViajesPostulacion'])->middleware(['auth', 'verified', 'can:postulaciones.asignarViajesPostulacion'])->name('asigna_viajes_postulacion');
-//Route::get('/descarga/{id}', [PostulacionController::class, 'downloadPostulacion'])->middleware(['auth', 'verified'])->name('descarga_postulacion');
+Route::get('/descarga', [PostulacionController::class, 'downloadPostulaciones'])->middleware(['auth', 'verified'])->name('descargar_postulaciones');
 Route::get('/descarga/{id}', [PostulacionController::class, 'downloadPDFPostulacion'])->middleware(['auth', 'verified'])->name('descarga_postulacion');
 Route::get('postulacion/documento/{token}', [PostulacionController::class, 'getDocument'])->middleware(['auth', 'verified'])->name('postulacion_documento');
 Route::get('/sendmail', [EmailController::class, 'enviarNotificacionPostulacion'])->middleware(['auth', 'verified'])->name('mailPostulacion');
+Route::patch('/terminar/{id}', [PostulacionController::class, 'terminarCarga'])->middleware(['auth', 'verified' ])->name('terminar_carga');
 
 Route::get('/usuario', [PostulacionController::class, 'index_customer'])->middleware(['auth', 'verified' , 'can:postulaciones.index_customer'])->name('index_customer');
 Route::get('/usuario/postular', [PostulacionController::class, 'create_by_customer'])->middleware(['auth', 'verified' , 'can:postulaciones.create_by_customer'])->name('create_by_customer');
@@ -69,6 +72,8 @@ Route::resources(['representante'=> RepresentanteController::class],  ['middlewa
 
 Route::resources(['viaje'=> ViajesController::class],  ['middleware' => ['auth', 'verified']]);
 Route::patch('/viaje/asignar/{id}', [ViajesController::class, 'set_assignment'])->middleware(['auth', 'verified', 'can:viajes.set_assignment'])->name('set_assignment');
+Route::get('/descargaviaje', [ViajesController::class, 'descargarListadoViajes'])->middleware(['auth', 'verified'])->name('descargar_viajes');
+Route::get('/descargapasajeros', [ViajesController::class, 'descargarListadoPasajeros'])->middleware(['auth', 'verified'])->name('descargar_pasajeros');
 
 Route::resources(['pasajero'=> PasajeroController::class],  ['middleware' => ['auth', 'verified']]);
 Route::patch('/eliminardocumento/{id}/{doc}', [PasajeroController::class, 'destroy_document'])->middleware(['auth', 'verified'])->name('destroy_document');
@@ -83,5 +88,7 @@ Route::resources(['usuarios'=> UserController::class],  ['middleware' => ['auth'
 Route::get('/prueba', [PeriodosController::class, 'prueba']);
 
 
+
 //Route::get('/postulacion/documento/{token}', 'PostulacionController@getDocument')->name('postulacion_documento');
+
 

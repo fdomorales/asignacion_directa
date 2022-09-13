@@ -1,0 +1,248 @@
+body{
+	font-family: poppins, sans-serif!important;
+	font-weight: 300;
+	font-style: normal;
+	background-color:#F4F7FC!important;
+	color:#5A607F!important;
+}
+.foto-login{
+	background-image:url(/img/login.png);
+	background-position: center;
+}
+.logo{
+	max-width: 324px
+}
+.input-login{
+	height: 40px!important;
+}
+p{
+	font-size:13px!important;
+	color:#5A607F!important;
+}
+.bg-header{
+	background-color: #f8f8f8;
+	height: 70px;
+}
+input{
+	width: 100%;
+    border: 1px solid #E0E0E0!important;
+    border-radius: 5px;
+    font-size: 13px!important;
+    padding: 6px 0px 0px 10px!important;
+    font-weight: 100!important;
+    color: #5A607F!important;
+}
+.input-group-text{
+	height: 34.3px;
+    font-size: 14px;
+}
+a{
+	color:#44A3DB!important;
+}
+b{
+	font-weight:bolder!important;
+}
+.migas{
+	color: #5A607F;
+	font-size: 11px;
+}
+.migas .active{
+	font-weight: 500;
+	font-size: 11px!important;
+}
+.link-olvido{
+	color:#44A3DB!important;
+	font-size:13px;
+	text-align: right;
+}
+.btn-verde{
+	border: 1px solid #2FACB2!important;
+    color: #2FACB2!important;
+    font-size: 14px!important;
+    font-weight: bolder!important;
+}
+.btn-verde a{	
+    color: #2FACB2!important;
+
+}
+.btn-verde a:hover{	
+    color: #fff!important;
+
+}
+.btn-verde:hover{
+	border: 1px solid #2FACB2!important;
+	background-color: #2FACB2!important;
+    color: #fff!important;
+    font-size: 14px!important;
+    font-weight: bolder!important;
+}
+.btn-azul{
+	border: 1px solid #006CB7!important;
+    color: #006CB7!important;
+    font-size: 14px!important;
+    font-weight: bolder!important;
+}
+.btn-azul:hover{
+	border: 1px solid #006CB7!important;
+    color: #fff!important;
+	background-color: #006CB7!important;
+    font-size: 14px!important;
+    font-weight: bolder!important;
+}
+.btn-rojo{
+	border: 1px solid #ef5350!important;
+    color: #ef5350!important;
+    font-size: 14px!important;
+    font-weight: bolder!important;
+}
+.btn-rojo:hover{
+	border: 1px solid #d04a47!important;
+    color: #fff!important;
+	background-color: #d04a47!important;
+    font-size: 14px!important;
+    font-weight: bolder!important;
+}
+.br{
+	border: 1px solid #E0E0E0;
+}
+.login-box{
+	min-height: 600px;
+}
+.sombra{
+	-webkit-box-shadow: 1px 1px 1px 1px rgb(21 34 50 / 8%);
+    box-shadow: 1px 1px 1px 1px rgb(21 34 50 / 8%);
+}
+.caja-contenedora{
+	display: flex;
+  	justify-content: center;
+}
+.caja-login{
+	position: absolute!important;
+  	top: 50%;
+  	margin-top: -300px;
+}
+.borde{
+	border-radius:5px;
+}
+.borde-izq{
+	border-radius:5px 0 0 5px;
+}
+.borde-der{
+	border-radius:0 5px 5px 0;
+}
+h1, h3, h3, h4, h5{
+	font-family: poppins, sans-serif!important;
+}
+h4{
+	font-size: 17px!important;
+	color:#131523!important;
+	font-family: poppins, sans-serif!important;
+	font-weight: bold!important;
+
+}
+.aviso-azul{
+	background-color: #F5F6FA;
+	border-left: 3px solid #57B8FF;
+}
+span, th{
+	font-size:13px;
+}
+label, .input-group-text{
+	font-size:14px!important;
+	font-weight: 400!important;
+}
+.estado{
+	font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 4px;
+}
+.estado-pendiente{
+	background-color: #FFC107;
+    color: #343A40;
+}
+.estado-aprobado{
+	background-color: #28A745;
+    color: #fff;
+}
+.caja-aviso{
+	background-color:#D4EDDA;
+	border:1px solid #C3E6CB;
+	padding:20px;
+}
+.caja-aviso p{
+	color:#155724!important;
+}
+.logo-vte{
+	height: 50px;
+}
+.imagen-header{
+	background-image:url(/img/fondo-login.png);
+	background-position: 0 42%!important;
+	background-position: center;
+	height: 190px;
+	width: 100%;
+}
+.table thead th {
+    font-weight: 500!important;
+}
+.table td, .table th {
+    font-size: 14px!important;
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #ffffff!important;
+}
+.form-select {
+	font-size:14px!important;
+}
+.content-header{
+	height: 70px!important;
+}
+#page-container.page-header-glass.page-header-fixed.page-header-scroll.page-header-inverse #page-header {
+    background-color: #f8f8f8!important;
+}
+#page-container.page-header-inverse #page-header {
+    background-color: #f8f8f8!important;
+	border-bottom:1px solid #ccc;
+}
+.menu-perfil, .dropdown-menu a {
+	color: #5A607F!important;
+    font-weight: 400!important;
+}
+btn-header{
+	font-size:16px!important;
+	color:#5A607F!important;
+
+}
+.dropdown-menu {
+    right: 0!important;
+}
+.close span{
+	font-size: 26px!important;
+}
+.header-travel{
+	background-color: #006CB7;
+    color: #fff!important;
+    margin: -25px;
+    padding: 15px 0 15px 0;
+    text-align: center;
+    border-radius: 5px 5px 0 0;
+}
+.header-travel h4{
+	color: #fff!important;
+}
+.ticket{
+	background-image: url(/img/arrow.png);
+    background-size: 60px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+hr{
+	background-color: #fff!important;
+    border-top: 2px dashed #8c8b8b!important;
+}
+@media only screen and (max-width : 900px) {
+	.ticket{
+		background-image: none;
+
+	}
+	}

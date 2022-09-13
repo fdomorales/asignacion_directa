@@ -28,6 +28,10 @@ class PostulacionAceptada extends Mailable
      */
     public function build()
     {
-        return $this->view('postulacion.emailAcepta');
+        return $this->markdown('postulacion.mails.emailAcepta')
+            ->from('asignaciondirecta@sernatur.cl','Asignacion Directa')
+            ->subject('Postulación Aceptada');
+
+        // return $this->view('postulacion.mails.emailAcepta');
     }
 }
